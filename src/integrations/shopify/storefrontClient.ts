@@ -8,7 +8,7 @@ console.log(SHOPIFY_STOREFRONT_ACCESS_TOKEN);
 
 export async function shopifyFetch<T>(
   query: string,
-  variables: Record<string, any> = {}
+  variables: Record<string, unknown> = {}
 ): Promise<T> {
   const res = await fetch(SHOPIFY_GRAPHQL_ENDPOINT, {
     method: "POST",
