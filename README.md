@@ -6,6 +6,11 @@ View the site: https://headless-shopify-site.vercel.app
 
 ### April 30, 2025
 
+- Moved graphql strings to separate files
+- Added grapqh-tag loaders in webpack and turbopack
+
+### April 30, 2025
+
 - Added Cart page
 - Added checkout button with link to checkout page
 

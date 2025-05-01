@@ -21,6 +21,8 @@ export async function shopifyFetch<T>(
 
   const json = await res.json();
 
+  console.log("Shopify response:", json);
+
   if (json.errors) {
     console.error(
       "Shopify Storefront API errors:",

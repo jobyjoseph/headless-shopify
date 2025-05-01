@@ -1,4 +1,6 @@
 import { shopifyFetch } from "../storefrontClient";
+import { print } from "graphql";
+import getProductByHandleQuery from "./graphql/product.graphql";
 
 interface Variant {
   id: string;
@@ -61,40 +63,9 @@ interface GetProductByHandleResponse {
 export async function getProductByHandle(
   handle: string
 ): Promise<Product | null> {
-  const getProductByHandleQuery = `
-    query getProductByHandle($handle: String!) {
-        product(handle: $handle) {
-            id
-            title
-            descriptionHtml
-            images(first: 5) {
-                edges {
-                    node {
-                    url
-                    altText
-                    }
-                }
-            }
-            variants(first: 10) {
-              edges {
-                node {
-                  id
-                  title
-                  availableForSale
-                }
-              }
-            }
-            priceRange {
-                minVariantPrice {
-                    amount
-                    currencyCode
-                }
-            }
-        }
-    }
-  `;
+  console.log(getProductByHandleQuery);
   const data = await shopifyFetch<GetProductByHandleResponse>(
-    getProductByHandleQuery,
+    print(getProductByHandleQuery),
     {
       handle,
     }

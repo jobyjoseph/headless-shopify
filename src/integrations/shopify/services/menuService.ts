@@ -1,4 +1,6 @@
 import { shopifyFetch } from "../storefrontClient";
+import menuQuery from "./graphql/menu.graphql";
+import { print } from "graphql";
 
 interface MenuItem {
   title: string;
@@ -12,20 +14,7 @@ interface Menu {
 }
 
 export async function getMenu(handle: string): Promise<Menu> {
-  const query = `
-    query getMenu($handle: String!) {
-      menu(handle: $handle) {
-        id
-        title
-        items {
-          title
-          url
-        }
-      }
-    }
-  `;
-
-  const data = await shopifyFetch<{ menu: Menu }>(query, { handle });
+  const data = await shopifyFetch<{ menu: Menu }>(print(menuQuery), { handle });
 
   return data.menu;
 }
