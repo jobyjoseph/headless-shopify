@@ -12,7 +12,6 @@ interface Menu {
 }
 
 export async function getMenu(handle: string): Promise<Menu> {
-  console.log("menu");
   const query = `
     query getMenu($handle: String!) {
       menu(handle: $handle) {

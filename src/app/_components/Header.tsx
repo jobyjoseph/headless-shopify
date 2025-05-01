@@ -13,7 +13,7 @@ export default async function Header() {
         </Link>
 
         {/* Menu */}
-        <nav className="flex space-x-6">
+        <nav className="flex items-center space-x-6">
           {menu.items.map((item) => (
             <Link
               key={item.title}
@@ -23,6 +23,12 @@ export default async function Header() {
               {item.title}
             </Link>
           ))}
+          <Link
+            href="/cart"
+            className="text-gray-600 hover:text-gray-900 hover:underline transition-all duration-200"
+          >
+            Cart
+          </Link>
         </nav>
       </div>
     </header>

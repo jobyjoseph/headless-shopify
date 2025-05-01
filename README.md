@@ -4,6 +4,16 @@ View the site: https://headless-shopify-site.vercel.app
 
 ## Changelog
 
+### April 30, 2025
+
+- Added Cart page
+- Added checkout button with link to checkout page
+
+### April 29, 2025
+
+- Added PDP page
+- Added Add to cart feature
+
 ### April 26, 2025
 
 - Added `<Header/>` component
