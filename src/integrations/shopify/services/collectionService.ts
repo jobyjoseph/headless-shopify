@@ -1,4 +1,6 @@
 import { shopifyFetch } from "../storefrontClient";
+import { print } from "graphql";
+import getAllProductsQuery from "./graphql/products.graphql";
 
 interface Product {
   id: string;
@@ -33,35 +35,8 @@ interface ProductEdge {
 }
 
 export async function getAllCollections(): Promise<Product[]> {
-  const getAllProductsQuery = `
-    query getAllProducts($first: Int = 20) {
-        products(first: $first) {
-            edges {
-                node {
-                    id
-                    title
-                    handle
-                    images(first: 1) {
-                        edges {
-                            node {
-                                url
-                                altText
-                            }
-                        }
-                    }
-                    priceRange {
-                        minVariantPrice {
-                            amount
-                            currencyCode
-                        }
-                    }
-                }
-            }
-        }
-    }
-  `;
   const data = await shopifyFetch<{ products: { edges: ProductEdge[] } }>(
-    getAllProductsQuery,
+    print(getAllProductsQuery),
     { first: 50 }
   );
 

@@ -1,4 +1,8 @@
 import { shopifyFetch } from "../storefrontClient";
+import { print } from "graphql";
+import getCartQuery from "./graphql/cart.graphql";
+import addToCartMutation from "./graphql/addToCart.graphql";
+import createCartMutation from "./graphql/createCart.graphql";
 
 // Types
 interface Cart {
@@ -60,67 +64,16 @@ interface CartWithLines {
 }
 
 export async function getCart(cartId: string): Promise<CartWithLines> {
-  const query = `
-    query getCart($cartId: ID!) {
-      cart(id: $cartId) {
-        id
-        checkoutUrl
-        cost {
-          subtotalAmount {
-            amount
-            currencyCode
-          }
-        }
-        lines(first: 20) {
-          edges {
-            node {
-              id
-              quantity
-              merchandise {
-                ... on ProductVariant {
-                  title
-                  image {
-                    url
-                    altText
-                  }
-                  price {
-                    amount
-                    currencyCode
-                  }
-                  product {
-                    title
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  `;
-
-  const data = await shopifyFetch<{ cart: CartWithLines }>(query, { cartId });
+  const data = await shopifyFetch<{ cart: CartWithLines }>(
+    print(getCartQuery),
+    { cartId }
+  );
 
   if (!data.cart) throw new Error("Cart not found");
   return data.cart;
 }
 
 export async function createCart(variantId: string) {
-  const query = `
-    mutation cartCreate($input: CartInput!) {
-      cartCreate(input: $input) {
-        cart {
-          id
-          checkoutUrl
-        }
-        userErrors {
-          field
-          message
-        }
-      }
-    }
-  `;
-
   const variables = {
     input: {
       lines: [
@@ -132,26 +85,14 @@ export async function createCart(variantId: string) {
     },
   };
 
-  const data = await shopifyFetch<CartCreateResponse>(query, variables);
+  const data = await shopifyFetch<CartCreateResponse>(
+    print(createCartMutation),
+    variables
+  );
   return data.cartCreate.cart;
 }
 
 export async function addToCart(cartId: string, variantId: string) {
-  const query = `
-    mutation cartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
-      cartLinesAdd(cartId: $cartId, lines: $lines) {
-        cart {
-          id
-          checkoutUrl
-        }
-        userErrors {
-          field
-          message
-        }
-      }
-    }
-  `;
-
   const variables = {
     cartId,
     lines: [
@@ -162,6 +103,9 @@ export async function addToCart(cartId: string, variantId: string) {
     ],
   };
 
-  const data = await shopifyFetch<CartLinesAddResponse>(query, variables);
+  const data = await shopifyFetch<CartLinesAddResponse>(
+    print(addToCartMutation),
+    variables
+  );
   return data.cartLinesAdd.cart;
 }

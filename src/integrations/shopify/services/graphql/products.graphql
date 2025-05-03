@@ -1,0 +1,25 @@
+query getAllProducts($first: Int = 20) {
+  products(first: $first) {
+    edges {
+      node {
+        id
+        title
+        handle
+        images(first: 1) {
+          edges {
+            node {
+              url
+              altText
+            }
+          }
+        }
+        priceRange {
+          minVariantPrice {
+            amount
+            currencyCode
+          }
+        }
+      }
+    }
+  }
+}

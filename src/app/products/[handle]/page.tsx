@@ -10,7 +10,6 @@ interface ProductPageProps {
 export default async function ProductPage({ params }: ProductPageProps) {
   const { handle } = await params;
   const product = await getProductByHandle(handle);
-
   if (!product) {
     notFound(); // shows Next.js 404 page
   }

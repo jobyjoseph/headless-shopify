@@ -63,7 +63,6 @@ interface GetProductByHandleResponse {
 export async function getProductByHandle(
   handle: string
 ): Promise<Product | null> {
-  console.log(getProductByHandleQuery);
   const data = await shopifyFetch<GetProductByHandleResponse>(
     print(getProductByHandleQuery),
     {

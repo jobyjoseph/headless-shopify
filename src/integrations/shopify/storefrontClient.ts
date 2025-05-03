@@ -3,9 +3,6 @@ const SHOPIFY_GRAPHQL_ENDPOINT: string =
 const SHOPIFY_STOREFRONT_ACCESS_TOKEN =
   process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN;
 
-console.log(SHOPIFY_GRAPHQL_ENDPOINT);
-console.log(SHOPIFY_STOREFRONT_ACCESS_TOKEN);
-
 export async function shopifyFetch<T>(
   query: string,
   variables: Record<string, unknown> = {}
@@ -20,8 +17,6 @@ export async function shopifyFetch<T>(
   });
 
   const json = await res.json();
-
-  console.log("Shopify response:", json);
 
   if (json.errors) {
     console.error(
