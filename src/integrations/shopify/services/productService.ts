@@ -1,63 +1,10 @@
 import { shopifyFetch } from "../storefrontClient";
 import { print } from "graphql";
 import getProductByHandleQuery from "./graphql/product.graphql";
-
-interface Variant {
-  id: string;
-  title: string;
-  available: boolean;
-}
-
-interface Product {
-  id: string;
-  title: string;
-  descriptionHtml: string;
-  images: { url: string; altText: string | null }[];
-  price: string;
-  variants: Variant[];
-}
-
-interface ImageNode {
-  url: string;
-  altText: string | null;
-}
-
-interface ImageEdge {
-  node: ImageNode;
-}
-
-interface VariantNode {
-  id: string;
-  title: string;
-  availableForSale: boolean;
-}
-
-interface VariantEdge {
-  node: VariantNode;
-}
-
-interface PriceRange {
-  minVariantPrice: {
-    amount: string;
-    currencyCode: string;
-  };
-}
-
-interface ProductNode {
-  id: string;
-  title: string;
-  descriptionHtml: string;
-  images: {
-    edges: ImageEdge[];
-  };
-  variants: {
-    edges: VariantEdge[];
-  };
-  priceRange: PriceRange;
-}
+import { Product } from "@/generated/shopifySchemaTypes";
 
 interface GetProductByHandleResponse {
-  product: ProductNode | null;
+  product: Product | null;
 }
 
 export async function getProductByHandle(
@@ -74,19 +21,5 @@ export async function getProductByHandle(
 
   if (!product) return null;
 
-  return {
-    id: product.id,
-    title: product.title,
-    descriptionHtml: product.descriptionHtml,
-    images: product.images.edges.map((edge) => ({
-      url: edge.node.url,
-      altText: edge.node.altText,
-    })),
-    price: `${product.priceRange.minVariantPrice.amount} ${product.priceRange.minVariantPrice.currencyCode}`,
-    variants: product.variants.edges.map((edge) => ({
-      id: edge.node.id,
-      title: edge.node.title,
-      available: edge.node.availableForSale,
-    })),
-  };
+  return product;
 }
