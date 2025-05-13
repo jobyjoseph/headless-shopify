@@ -12,6 +12,21 @@ const config: CodegenConfig = {
   generates: {
     "./src/generated/shopifySchemaTypes.ts": {
       plugins: ["typescript"],
+      config: {
+        strictScalars: true, // <-- important to avoid `any` types
+        avoidOptionals: true, // optional: makes fields non-optional unless explicitly nullable
+        maybeValue: "T | null", // optional: prevents `any` from being inferred on nullable types
+        scalars: {
+          Color: "string",
+          DateTime: "string",
+          Decimal: "string",
+          HTML: "string",
+          ISO8601DateTime: "string",
+          JSON: "string",
+          URL: "string",
+          UnsignedInt64: "number",
+        },
+      },
     },
   },
 };
