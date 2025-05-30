@@ -3,6 +3,8 @@ import { print } from "graphql";
 import getCartQuery from "./graphql/cart.graphql";
 import addToCartMutation from "./graphql/addToCart.graphql";
 import createCartMutation from "./graphql/createCart.graphql";
+import { cartLinesUpdate as updateCartMutation, cartLinesRemove as removeCartMutation } from "./graphql/updateCart.graphql";
+import { CartLinesUpdateMutation, CartLinesRemoveMutation } from "@/generated/shopifySchemaTypes";
 
 // Types
 interface Cart {
@@ -73,13 +75,13 @@ export async function getCart(cartId: string): Promise<CartWithLines> {
   return data.cart;
 }
 
-export async function createCart(variantId: string) {
+export async function createCart(variantId: string, quantity: number = 1) {
   const variables = {
     input: {
       lines: [
         {
           merchandiseId: variantId,
-          quantity: 1,
+          quantity,
         },
       ],
     },
@@ -92,13 +94,20 @@ export async function createCart(variantId: string) {
   return data.cartCreate.cart;
 }
 
-export async function addToCart(cartId: string, variantId: string) {
+export async function addToCart(variantId: string, quantity: number = 1, cartId?: string | null): Promise<{ cart: Cart; cartId: string }> {
+  // If no cart exists, create one
+  if (!cartId) {
+    const cart = await createCart(variantId, quantity);
+    return { cart, cartId: cart.id };
+  }
+
+  // Add to existing cart
   const variables = {
     cartId,
     lines: [
       {
         merchandiseId: variantId,
-        quantity: 1,
+        quantity,
       },
     ],
   };
@@ -107,5 +116,51 @@ export async function addToCart(cartId: string, variantId: string) {
     print(addToCartMutation),
     variables
   );
-  return data.cartLinesAdd.cart;
+  
+  if (data.cartLinesAdd.userErrors.length > 0) {
+    throw new Error(data.cartLinesAdd.userErrors[0].message);
+  }
+  
+  return { cart: data.cartLinesAdd.cart, cartId: data.cartLinesAdd.cart.id };
+}
+
+export async function updateCartItemQuantity(cartId: string, lineId: string, quantity: number) {
+  const variables = {
+    cartId,
+    lines: [
+      {
+        id: lineId,
+        quantity,
+      },
+    ],
+  };
+
+  const data = await shopifyFetch<CartLinesUpdateMutation>(
+    print(updateCartMutation),
+    variables
+  );
+  
+  if (data.cartLinesUpdate?.userErrors && data.cartLinesUpdate.userErrors.length > 0) {
+    throw new Error(data.cartLinesUpdate.userErrors[0].message);
+  }
+  
+  return data.cartLinesUpdate?.cart;
+}
+
+export async function removeCartItem(cartId: string, lineId: string) {
+  const variables = {
+    cartId,
+    lineIds: [lineId],
+  };
+
+  const data = await shopifyFetch<CartLinesRemoveMutation>(
+    print(removeCartMutation),
+    variables
+  );
+  
+  if (data.cartLinesRemove?.userErrors && data.cartLinesRemove.userErrors.length > 0) {
+    throw new Error(data.cartLinesRemove.userErrors[0].message);
+  }
+  
+  return data.cartLinesRemove?.cart;
 }

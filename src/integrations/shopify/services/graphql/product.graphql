@@ -3,24 +3,64 @@ query getProductByHandle($handle: String!) {
     id
     title
     descriptionHtml
-    images(first: 5) {
+    availableForSale
+    seo {
+      title
+      description
+    }
+    images(first: 10) {
       edges {
         node {
+          id
           url
           altText
+          width
+          height
         }
       }
     }
-    variants(first: 10) {
+    options {
+      id
+      name
+      values
+    }
+    variants(first: 100) {
       edges {
         node {
           id
           title
           availableForSale
+          quantityAvailable
+          selectedOptions {
+            name
+            value
+          }
+          price {
+            amount
+            currencyCode
+          }
+          compareAtPrice {
+            amount
+            currencyCode
+          }
+          image {
+            url
+            altText
+          }
         }
       }
     }
     priceRange {
+      minVariantPrice {
+        amount
+        currencyCode
+      }
+      maxVariantPrice {
+        amount
+        currencyCode
+      }
+    }
+    compareAtPriceRange {
       minVariantPrice {
         amount
         currencyCode

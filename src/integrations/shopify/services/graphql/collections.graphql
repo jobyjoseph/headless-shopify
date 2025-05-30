@@ -1,0 +1,78 @@
+query getCollections($first: Int = 10) {
+  collections(first: $first) {
+    edges {
+      node {
+        id
+        title
+        handle
+        description
+        image {
+          url
+          altText
+        }
+        products(first: 4) {
+          edges {
+            node {
+              id
+              title
+              handle
+              featuredImage {
+                url
+                altText
+              }
+              priceRange {
+                minVariantPrice {
+                  amount
+                  currencyCode
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+query getCollectionByHandle($handle: String!, $first: Int = 24, $after: String) {
+  collection(handle: $handle) {
+    id
+    title
+    handle
+    description
+    image {
+      url
+      altText
+    }
+    products(first: $first, after: $after) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+      edges {
+        node {
+          id
+          title
+          handle
+          availableForSale
+          featuredImage {
+            url
+            altText
+          }
+          priceRange {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+          compareAtPriceRange {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+        }
+      }
+    }
+  }
+}

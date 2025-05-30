@@ -1,0 +1,28 @@
+query getFeaturedProducts($first: Int = 8) {
+  products(first: $first, sortKey: BEST_SELLING) {
+    edges {
+      node {
+        id
+        title
+        handle
+        availableForSale
+        featuredImage {
+          url
+          altText
+        }
+        priceRange {
+          minVariantPrice {
+            amount
+            currencyCode
+          }
+        }
+        compareAtPriceRange {
+          minVariantPrice {
+            amount
+            currencyCode
+          }
+        }
+      }
+    }
+  }
+}

@@ -3,8 +3,14 @@ query getMenu($handle: String!) {
     id
     title
     items {
+      id
       title
       url
+      items {
+        id
+        title
+        url
+      }
     }
   }
 }

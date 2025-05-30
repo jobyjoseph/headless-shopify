@@ -1,0 +1,37 @@
+query searchProducts($query: String!, $first: Int = 24, $after: String) {
+  search(query: $query, types: PRODUCT, first: $first, after: $after) {
+    edges {
+      node {
+        ... on Product {
+          __typename
+          id
+          title
+          handle
+          description
+          availableForSale
+          featuredImage {
+            url
+            altText
+          }
+          priceRange {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+          compareAtPriceRange {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    totalCount
+  }
+}

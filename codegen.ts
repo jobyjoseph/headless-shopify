@@ -9,9 +9,10 @@ const config: CodegenConfig = {
       },
     },
   },
+  documents: "./src/**/*.graphql",
   generates: {
     "./src/generated/shopifySchemaTypes.ts": {
-      plugins: ["typescript"],
+      plugins: ["typescript", "typescript-operations"],
       config: {
         strictScalars: true, // <-- important to avoid `any` types
         avoidOptionals: true, // optional: makes fields non-optional unless explicitly nullable
