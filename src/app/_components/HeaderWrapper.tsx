@@ -15,7 +15,8 @@ export default async function HeaderWrapper() {
   }
 
   // Get cart item count from cookie if available
-  const cartId = cookies().get("shopify_cart_id")?.value;
+  const cookieStore = await cookies();
+  const cartId = cookieStore.get("shopify_cart_id")?.value;
   if (cartId) {
     try {
       const cart = await getCart(cartId);

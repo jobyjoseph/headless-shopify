@@ -5,16 +5,15 @@ import { searchProducts } from "@/integrations/shopify/services/searchService";
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: { q?: string };
+  searchParams: Promise<{ q?: string }>;
 }) {
-  const query = searchParams.q || "";
+  const params = await searchParams;
+  const query = params.q || "";
 
   let searchResult = null;
   if (query) {
     searchResult = await searchProducts(query);
   }
-
-  console.log(searchResult);
 
   return (
     <div className="container mx-auto px-4 py-8">

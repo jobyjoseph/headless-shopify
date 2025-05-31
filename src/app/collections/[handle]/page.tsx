@@ -6,9 +6,10 @@ import { getCollectionByHandle } from "@/integrations/shopify/services/collectio
 export default async function CollectionPage({
   params,
 }: {
-  params: { handle: string };
+  params: Promise<{ handle: string }>;
 }) {
-  const { collection, products } = await getCollectionByHandle(params.handle);
+  const { handle } = await params;
+  const { collection, products } = await getCollectionByHandle(handle);
 
   if (!collection) {
     notFound();

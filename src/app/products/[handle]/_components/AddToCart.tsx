@@ -24,7 +24,7 @@ export default function AddToCartButton({ variantId }: AddToCartButtonProps) {
         cartId = newCart.id;
         setCartId(cartId);
       } else {
-        await addToCart(cartId, productId);
+        await addToCart(productId, 1, cartId);
       }
       setSuccess(true);
     } catch (error) {

@@ -7,10 +7,10 @@ interface Product {
   id: string;
   title: string;
   handle: string;
-  description?: string;
+  description: string;
   imageUrl: string | null;
   price: string;
-  compareAtPrice?: string | null;
+  compareAtPrice: string | null;
   availableForSale: boolean;
 }
 
@@ -33,10 +33,7 @@ export async function searchProducts(
     { query, first, after }
   );
 
-  console.log("Search response:", JSON.stringify(data, null, 2));
-
   if (!data || !data.search || !data.search.edges) {
-    console.error("Invalid search response structure:", data);
     return {
       products: [],
       totalCount: 0,
@@ -56,7 +53,7 @@ export async function searchProducts(
         id: product.id,
         title: product.title,
         handle: product.handle,
-        description: product.description,
+        description: product.description || "",
         imageUrl: product.featuredImage?.url || null,
         price: `${product.priceRange.minVariantPrice.amount} ${product.priceRange.minVariantPrice.currencyCode}`,
         compareAtPrice: product.compareAtPriceRange?.minVariantPrice
