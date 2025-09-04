@@ -1,0 +1,8 @@
+@use "tailwindcss";
+@use "./fonts";
+
+@theme {
+  --breakpoint-lg: 66.25rem;
+  --color-alert-medium: #b00020;
+  --font-proxima: "proxima-nova", Helvetica, sans-serif;
+}

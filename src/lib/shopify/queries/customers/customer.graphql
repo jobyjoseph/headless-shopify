@@ -1,0 +1,8 @@
+query GetCustomer($customerAccessToken: String) {
+  customer(customerAccessToken: $customerAccessToken) {
+    id
+    firstName
+    lastName
+    email
+  }
+}

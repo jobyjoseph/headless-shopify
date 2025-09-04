@@ -1,35 +1,28 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import HeaderWrapper from "./_components/HeaderWrapper";
+import ThemeProvider from "@/context/theme-provider";
+import * as React from "react";
+import { Josefin_Sans } from "next/font/google";
+import Header from "./_components/header/header";
+import "./global.scss";
+import AuthModal from "./_components/auth-modal/auth-modal";
+import { SessionProvider } from "next-auth/react";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const josefinSans = Josefin_Sans({
   subsets: ["latin"],
 });
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export const metadata: Metadata = {
-  title: "MyStore - Shop the Latest Products",
-  description: "Discover amazing products at great prices. Shop our collections for the latest trends.",
-};
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <HeaderWrapper />
-        {children}
+      <body className={josefinSans.className}>
+        <SessionProvider>
+          <Header />
+          <ThemeProvider>{children}</ThemeProvider>
+          <AuthModal />
+        </SessionProvider>
       </body>
     </html>
   );
