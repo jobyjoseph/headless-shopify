@@ -1,0 +1,121 @@
+query Product($handle: String!) {
+  product(handle: $handle) {
+    id
+    title
+    handle
+    description
+    publishedAt
+    createdAt
+    vendor
+    productType
+    tags
+    priceRange {
+      maxVariantPrice {
+        amount
+        currencyCode
+      }
+      minVariantPrice {
+        amount
+        currencyCode
+      }
+    }
+    availableForSale
+    compareAtPriceRange {
+      maxVariantPrice {
+        amount
+        currencyCode
+      }
+      minVariantPrice {
+        amount
+        currencyCode
+      }
+    }
+    variants(first: 100) {
+      edges {
+        node {
+          id
+          title
+          selectedOptions {
+            name
+            value
+          }
+          sku
+          requiresShipping
+          taxable
+          image {
+            id
+            altText
+            width
+            height
+            url
+          }
+          availableForSale
+          price {
+            amount
+            currencyCode
+          }
+          weight
+          compareAtPrice {
+            amount
+            currencyCode
+          }
+          barcode
+          sellingPlanAllocations(first: 100) {
+            edges {
+              node {
+                sellingPlan {
+                  id
+                  name
+                }
+              }
+            }
+          }
+          quantityRule {
+            minimum
+            maximum
+            increment
+          }
+        }
+      }
+    }
+    images(first: 100) {
+      edges {
+        node {
+          url
+          altText
+          width
+          height
+        }
+      }
+    }
+    featuredImage {
+      url
+    }
+    options(first: 10) {
+      name
+    }
+    media(first: 100) {
+      edges {
+        node {
+          alt
+          id
+          previewImage {
+            height
+            width
+            url
+          }
+          mediaContentType
+        }
+      }
+    }
+    requiresSellingPlan
+    sellingPlanGroups(first: 100) {
+      edges {
+        node {
+          name
+        }
+      }
+    }
+    descriptionHtml
+  }
+}

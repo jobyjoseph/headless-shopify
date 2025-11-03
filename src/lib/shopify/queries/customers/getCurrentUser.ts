@@ -29,6 +29,5 @@ export const getCurrentUser = async () => {
     return response.customer;
   } catch (error) {
     console.log("Error fetching current user:", error);
-    throw new Error("Failed to fetch user profile");
   }
 };

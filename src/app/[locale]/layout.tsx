@@ -1,4 +1,4 @@
-import ThemeProvider from "context/theme-provider";
+import ThemeProvider from "@/context/theme-provider";
 import * as React from "react";
 
 export default function RootLayout({
