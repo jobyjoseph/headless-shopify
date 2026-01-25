@@ -1,10 +1,10 @@
-import ThemeProvider from "@/context/theme-provider";
 import * as React from "react";
 import { Josefin_Sans } from "next/font/google";
-import Header from "./_components/header/header";
-import "./global.scss";
-import AuthModal from "./_components/auth-modal/auth-modal";
+import ThemeProvider from "@/context/theme-provider";
 import { SessionProvider } from "next-auth/react";
+import "./global.scss";
+import { Header } from "./_components/Header/Header";
+import { Footer } from "./_components/Footer/Footer";
 
 const josefinSans = Josefin_Sans({
   subsets: ["latin"],
@@ -21,7 +21,7 @@ export default function RootLayout({
         <SessionProvider>
           <Header />
           <ThemeProvider>{children}</ThemeProvider>
-          <AuthModal />
+          <Footer />
         </SessionProvider>
       </body>
     </html>

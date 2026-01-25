@@ -1,6 +1,6 @@
 import React from "react";
 
-const DesktopMainMenu = () => {
+export const DesktopMainMenu = () => {
   return (
     <ul className="hidden lg:flex justify-self-start gap-8 text-lg">
       <li>
@@ -18,5 +18,3 @@ const DesktopMainMenu = () => {
     </ul>
   );
 };
-
-export default DesktopMainMenu;

@@ -1,7 +1,7 @@
 import { HiOutlineSearch, HiMenu } from "react-icons/hi";
 import React from "react";
 
-const MobileLeftLinks = () => {
+export const MobileLeftLinks = () => {
   return (
     <ul className="flex lg:hidden">
       <li>
@@ -17,5 +17,3 @@ const MobileLeftLinks = () => {
     </ul>
   );
 };
-
-export default MobileLeftLinks;

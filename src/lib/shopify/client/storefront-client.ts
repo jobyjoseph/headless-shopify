@@ -12,7 +12,7 @@ class ShopifyStorefrontClient {
   private headers: Record<string, string>;
 
   constructor() {
-    this.endpoint = `https://${process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN}/api/${process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_API_VERSION}/graphql.json`;
+    this.endpoint = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_GRAPHQL_ENDPOINT;
     this.headers = {
       "Content-Type": "application/json",
       "X-Shopify-Storefront-Access-Token":
@@ -35,7 +35,7 @@ class ShopifyStorefrontClient {
 
       if (!response.ok) {
         throw new Error(
-          `Shopify API Error: ${response.status} ${response.statusText}`
+          `Shopify API Error: ${response.status} ${response.statusText}`,
         );
       }
 

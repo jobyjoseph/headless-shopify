@@ -4,9 +4,9 @@ import {
   HiOutlineShoppingBag,
 } from "react-icons/hi";
 import React from "react";
-import AccountLink from "./account-link/account-link";
+import { AccountLink } from "./AccountLink/AccountLink";
 
-const RightLinks = () => {
+export const RightLinks = () => {
   return (
     <ul className="flex justify-self-end lg:col-4 gap-2 lg:gap-8">
       <li className="flex justify-center items-center">
@@ -30,5 +30,3 @@ const RightLinks = () => {
     </ul>
   );
 };
-
-export default RightLinks;

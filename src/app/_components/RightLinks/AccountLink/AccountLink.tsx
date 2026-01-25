@@ -1,0 +1,43 @@
+"use client";
+import React, { useEffect, useState } from "react";
+import { HiOutlineUser } from "react-icons/hi";
+import { getCurrentUser } from "@/lib/shopify/queries/customers/getCurrentUser";
+
+export const AccountLink = () => {
+  const [user, setUser] = useState(null);
+  const [showUser, setShowUser] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const user = await getCurrentUser();
+      setUser(user);
+      setShowUser(true);
+    })();
+  }, []);
+
+  const openAuthModal = () => {
+    document.getElementById("auth-modal").classList.remove("hidden");
+  };
+
+  if (!showUser) return null;
+
+  return (
+    <div>
+      {user?.id ? (
+        <>
+          <span className="md:hidden">
+            <HiOutlineUser className="text-2xl" />
+          </span>
+          <span className="hidden md:inline ml-1">Hi {user?.firstName}!</span>
+        </>
+      ) : (
+        <button onClick={openAuthModal} className="p-1">
+          <span className="md:hidden">
+            <HiOutlineUser className="text-2xl" />
+          </span>
+          <span className="hidden md:inline">Login / Register</span>
+        </button>
+      )}
+    </div>
+  );
+};
