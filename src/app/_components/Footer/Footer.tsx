@@ -4,9 +4,12 @@ import { Logo } from "../Logo/Logo";
 
 export const Footer = () => {
   return (
-    <footer className="border-box border-t border-gray-200 px-5 py-4 lg:px-10 flex flex-col items-center gap-4">
-      <div className="w-full flex flex-col lg:flex-row items-center justify-between gap-4">
+    <footer className="border-box border-t border-gray-200 px-5 py-4 lg:px-10">
+      <div className="relative flex flex-col lg:flex-row items-center justify-between gap-4">
         <Logo />
+        <p className="text-sm text-gray-500 lg:absolute lg:left-1/2 lg:-translate-x-1/2 order-last lg:order-none">
+          © {new Date().getFullYear()} All rights reserved.
+        </p>
         <nav className="flex items-center gap-6">
           <Link
             href="/about"
@@ -34,9 +37,6 @@ export const Footer = () => {
           </Link>
         </nav>
       </div>
-      <p className="text-sm text-gray-500 text-center w-full">
-        © {new Date().getFullYear()} All rights reserved.
-      </p>
     </footer>
   );
 };
