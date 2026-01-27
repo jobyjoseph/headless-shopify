@@ -1,6 +1,9 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Pagination } from "@/components/Pagination/Pagination";
 
 // Placeholder data - will be replaced with Shopify API data
 const placeholderCollection = {
@@ -172,6 +175,8 @@ const ProductTile = ({ product }: ProductTileProps) => {
 export default function CollectionPage() {
   // TODO: Fetch collection data from Shopify API using params.handle
   const collection = placeholderCollection;
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 4;
 
   return (
     <main className="px-5 py-8 lg:px-10 lg:py-12">
@@ -190,6 +195,13 @@ export default function CollectionPage() {
           <ProductTile key={product.id} product={product} />
         ))}
       </div>
+
+      {/* Pagination */}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
     </main>
   );
 }
