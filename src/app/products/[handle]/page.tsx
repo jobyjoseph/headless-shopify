@@ -11,6 +11,7 @@ import { ProductPrice } from "./_components/ProductPrice";
 import { ProductRating } from "./_components/ProductRating";
 import { ProductSizeSelector } from "./_components/ProductSizeSelector";
 import { ProductTitle } from "./_components/ProductTitle";
+import { SimilarItems } from "./_components/SimilarItems";
 
 // Mock product data
 const mockProduct = {
@@ -48,6 +49,41 @@ const mockProduct = {
     },
   ],
 };
+
+const similarProducts = [
+  {
+    id: "1",
+    title: "Ribbed Prosper Tank",
+    price: "$68.00",
+    image:
+      "https://cdn.shopify.com/s/files/1/2185/2813/files/W2799R_06661_b2_s1_a1_m191_640x.jpg?v=1768302759",
+    handle: "ribbed-prosper-tank",
+  },
+  {
+    id: "2",
+    title: "Alosoft Crop Finesse Short Sleeve",
+    price: "$58.00",
+    image:
+      "https://cdn.shopify.com/s/files/1/2185/2813/files/W1406R_06661_b1_s1_a4_m91_640x.jpg?v=1768292548",
+    handle: "alosoft-crop-finesse-short-sleeve",
+  },
+  {
+    id: "3",
+    title: "Airbrush Streamlined Bra Tank",
+    price: "$68.00",
+    image:
+      "https://cdn.shopify.com/s/files/1/2185/2813/files/W9538R_0998_b1_s1_a4_m91_640x.jpg?v=1768338651",
+    handle: "airbrush-streamlined-bra-tank",
+  },
+  {
+    id: "4",
+    title: "Aspire Tank",
+    price: "$58.00",
+    image:
+      "https://cdn.shopify.com/s/files/1/2185/2813/files/W2675RG_0930_b1_s1_a3_m261_640x.jpg?v=1763642268",
+    handle: "aspire-tank",
+  },
+];
 
 export default function ProductPage() {
   const product = mockProduct;
@@ -88,6 +124,8 @@ export default function ProductPage() {
           <ProductDescription description={product.description} />
         </div>
       </div>
+
+      <SimilarItems products={similarProducts} />
     </main>
   );
 }
