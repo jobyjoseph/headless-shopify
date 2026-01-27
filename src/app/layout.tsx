@@ -31,7 +31,9 @@ export default function RootLayout({
       <body className={josefinSans.className}>
         <SessionProvider>
           <Header />
-          <ThemeProvider>{children}</ThemeProvider>
+          <div className="mx-auto w-full max-w-[1590px]">
+            <ThemeProvider>{children}</ThemeProvider>
+          </div>
           <Footer />
         </SessionProvider>
       </body>

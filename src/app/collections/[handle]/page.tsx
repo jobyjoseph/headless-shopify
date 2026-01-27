@@ -153,7 +153,7 @@ interface ProductTileProps {
 const ProductTile = ({ product }: ProductTileProps) => {
   return (
     <Link href={`/products/${product.handle}`} className="group">
-      <div className="aspect-square relative bg-gray-100 rounded-lg overflow-hidden mb-3">
+      <div className="aspect-[3/4] relative bg-gray-100 overflow-hidden mb-3">
         <Image
           src={product.image}
           alt={product.title}
@@ -161,10 +161,10 @@ const ProductTile = ({ product }: ProductTileProps) => {
           className="object-cover group-hover:scale-105 transition-transform duration-300"
         />
       </div>
-      <h3 className="text-sm font-medium text-gray-900 group-hover:text-gray-600 transition-colors">
+      <h3 className="font-normal text-gray-900 group-hover:text-gray-600 transition-colors">
         {product.title}
       </h3>
-      <p className="text-sm text-gray-500 mt-1">{product.price}</p>
+      <p className="font-light text-gray-500 mt-1">{product.price}</p>
     </Link>
   );
 };
@@ -181,9 +181,7 @@ export default function CollectionPage() {
           {collection.title}
         </h1>
         <p className="text-gray-600 mb-3">{collection.description}</p>
-        <p className="text-sm text-gray-500">
-          {collection.productsCount} products
-        </p>
+        <p className="text-gray-900">{collection.productsCount} products</p>
       </div>
 
       {/* Products Grid */}
