@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { HiOutlineUser } from "react-icons/hi";
 import { getCurrentUser } from "@/lib/shopify/queries/customers/getCurrentUser";
+import Link from "next/link";
 
 export const AccountLink = () => {
   const [user, setUser] = useState(null);
@@ -31,12 +32,12 @@ export const AccountLink = () => {
           <span className="hidden md:inline ml-1">Hi {user?.firstName}!</span>
         </>
       ) : (
-        <button onClick={openAuthModal} className="p-1">
+        <Link href="/account/login" className="p-1 inline-flex">
           <span className="md:hidden">
             <HiOutlineUser className="text-2xl" />
           </span>
           <span className="hidden md:inline">Login / Register</span>
-        </button>
+        </Link>
       )}
     </div>
   );

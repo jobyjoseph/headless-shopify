@@ -28,10 +28,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={josefinSans.className}>
+      <body className={`${josefinSans.className} min-h-screen flex flex-col`}>
         <SessionProvider>
           <Header />
-          <div className="mx-auto w-full max-w-[1590px]">
+          <div className="mx-auto w-full max-w-[1590px] flex-1">
             <ThemeProvider>{children}</ThemeProvider>
           </div>
           <Footer />

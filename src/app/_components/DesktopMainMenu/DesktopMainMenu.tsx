@@ -1,19 +1,19 @@
-import React from "react";
+import Link from "next/link";
 
 export const DesktopMainMenu = () => {
   return (
     <ul className="hidden lg:flex justify-self-start gap-8 text-lg">
       <li>
-        <a href="#">Women</a>
+        <Link href="/collections/women">Women</Link>
       </li>
       <li>
-        <a href="#">Men</a>
+        <Link href="/collections/men">Men</Link>
       </li>
       <li>
-        <a href="#">Kids</a>
+        <Link href="/collections/kids">Kids</Link>
       </li>
       <li>
-        <a href="#">Accessories</a>
+        <Link href="/collections/accessories">Accessories</Link>
       </li>
     </ul>
   );
