@@ -1,5 +1,6 @@
 import { HiOutlineSearch, HiOutlineShoppingBag } from "react-icons/hi";
 import React from "react";
+import Link from "next/link";
 import { AccountLink } from "./AccountLink/AccountLink";
 
 export const RightLinks = () => {
@@ -14,9 +15,9 @@ export const RightLinks = () => {
         <AccountLink />
       </li>
       <li>
-        <button className="p-1">
+        <Link href="/cart" className="p-1 block">
           <HiOutlineShoppingBag className="text-2xl" />
-        </button>
+        </Link>
       </li>
     </ul>
   );

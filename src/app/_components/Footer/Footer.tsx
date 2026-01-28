@@ -11,28 +11,16 @@ export const Footer = () => {
           © {new Date().getFullYear()} All rights reserved.
         </p>
         <nav className="flex items-center gap-6">
-          <Link
-            href="/about"
-            className="text-sm text-gray-600 hover:text-gray-900"
-          >
+          <Link href="#" className="text-sm text-gray-600 hover:text-gray-900">
             About
           </Link>
-          <Link
-            href="/contact"
-            className="text-sm text-gray-600 hover:text-gray-900"
-          >
+          <Link href="#" className="text-sm text-gray-600 hover:text-gray-900">
             Contact
           </Link>
-          <Link
-            href="/privacy"
-            className="text-sm text-gray-600 hover:text-gray-900"
-          >
+          <Link href="#" className="text-sm text-gray-600 hover:text-gray-900">
             Privacy
           </Link>
-          <Link
-            href="/terms"
-            className="text-sm text-gray-600 hover:text-gray-900"
-          >
+          <Link href="#" className="text-sm text-gray-600 hover:text-gray-900">
             Terms
           </Link>
         </nav>
