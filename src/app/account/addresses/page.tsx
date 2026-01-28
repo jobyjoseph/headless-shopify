@@ -1,6 +1,46 @@
 import React from "react";
 import Link from "next/link";
 
+// Sample addresses data
+const sampleAddresses = [
+  {
+    id: "address-1",
+    isDefault: true,
+    name: "Jane Doe",
+    address1: "123 Yoga Lane",
+    address2: "Apt 4B",
+    city: "Los Angeles",
+    state: "CA",
+    zip: "90001",
+    country: "United States",
+    phone: "(310) 555-1234",
+  },
+  {
+    id: "address-2",
+    isDefault: false,
+    name: "Jane Doe",
+    address1: "456 Fitness Blvd",
+    address2: "",
+    city: "Santa Monica",
+    state: "CA",
+    zip: "90401",
+    country: "United States",
+    phone: "(310) 555-5678",
+  },
+  {
+    id: "address-3",
+    isDefault: false,
+    name: "Jane Doe (Work)",
+    address1: "789 Corporate Plaza",
+    address2: "Suite 200",
+    city: "Beverly Hills",
+    state: "CA",
+    zip: "90210",
+    country: "United States",
+    phone: "(310) 555-9012",
+  },
+];
+
 export default function AddressesPage() {
   return (
     <div className="border-box px-5 py-8 lg:px-10 min-h-[60vh]">
@@ -15,80 +55,57 @@ export default function AddressesPage() {
           </Link>
         </div>
 
-        {/* Empty state */}
-        <div className="text-center py-16 border border-gray-200">
-          <p className="text-gray-500 mb-4">
-            You haven&apos;t saved any addresses yet.
-          </p>
-          <button className="inline-block bg-gray-900 text-white py-3 px-6 hover:bg-gray-800 transition-colors uppercase cursor-pointer">
+        {/* Add New Address Button */}
+        <div className="mb-8">
+          <button className="bg-gray-900 text-white py-3 px-6 hover:bg-gray-800 transition-colors uppercase cursor-pointer text-sm">
             Add New Address
           </button>
         </div>
 
-        {/* Add address form - will be shown when adding new address */}
-        {/*
-        <form className="border border-gray-200 p-6 mb-8">
-          <h2 className="text-lg font-medium mb-4">Add New Address</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex flex-col gap-2">
-              <label htmlFor="firstName" className="text-gray-900">First Name</label>
-              <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                className="border border-gray-200 px-4 py-2 text-gray-900 focus:outline-none focus:border-gray-400"
-                required
-              />
+        {/* Addresses Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sampleAddresses.map((address) => (
+            <div
+              key={address.id}
+              className="border border-gray-200 p-5 relative flex flex-col"
+            >
+              {address.isDefault && (
+                <span className="absolute top-3 right-3 text-xs bg-gray-100 text-gray-600 px-2 py-1">
+                  Default
+                </span>
+              )}
+              <div className="space-y-1 flex-1">
+                <p className="font-medium text-gray-900">{address.name}</p>
+                <p className="text-gray-600">{address.address1}</p>
+                {address.address2 && (
+                  <p className="text-gray-600">{address.address2}</p>
+                )}
+                <p className="text-gray-600">
+                  {address.city}, {address.state} {address.zip}
+                </p>
+                <p className="text-gray-600">{address.country}</p>
+                {address.phone && (
+                  <p className="text-gray-500 text-sm mt-2">{address.phone}</p>
+                )}
+              </div>
+              <div className="flex gap-4 pt-4 mt-4 border-t border-gray-100">
+                <button className="text-gray-600 hover:text-gray-900 text-sm cursor-pointer">
+                  Edit
+                </button>
+                {!address.isDefault && (
+                  <>
+                    <button className="text-gray-600 hover:text-gray-900 text-sm cursor-pointer">
+                      Set as Default
+                    </button>
+                    <button className="text-red-600 hover:text-red-800 text-sm cursor-pointer">
+                      Delete
+                    </button>
+                  </>
+                )}
+              </div>
             </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="lastName" className="text-gray-900">Last Name</label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                className="border border-gray-200 px-4 py-2 text-gray-900 focus:outline-none focus:border-gray-400"
-                required
-              />
-            </div>
-            <div className="flex flex-col gap-2 md:col-span-2">
-              <label htmlFor="address1" className="text-gray-900">Address</label>
-              <input
-                type="text"
-                id="address1"
-                name="address1"
-                className="border border-gray-200 px-4 py-2 text-gray-900 focus:outline-none focus:border-gray-400"
-                required
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="city" className="text-gray-900">City</label>
-              <input
-                type="text"
-                id="city"
-                name="city"
-                className="border border-gray-200 px-4 py-2 text-gray-900 focus:outline-none focus:border-gray-400"
-                required
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="zip" className="text-gray-900">ZIP Code</label>
-              <input
-                type="text"
-                id="zip"
-                name="zip"
-                className="border border-gray-200 px-4 py-2 text-gray-900 focus:outline-none focus:border-gray-400"
-                required
-              />
-            </div>
-          </div>
-          <button
-            type="submit"
-            className="mt-6 bg-gray-900 text-white py-3 px-6 hover:bg-gray-800 transition-colors cursor-pointer uppercase"
-          >
-            Save Address
-          </button>
-        </form>
-        */}
+          ))}
+        </div>
       </div>
     </div>
   );
