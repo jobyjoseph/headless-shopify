@@ -19,7 +19,7 @@ export const AccountLink = () => {
   if (!showUser) return null;
 
   return (
-    <div>
+    <>
       {user?.id ? (
         <Link href="/account" className="p-1 inline-flex items-center">
           <span className="md:hidden">
@@ -35,6 +35,6 @@ export const AccountLink = () => {
           <span className="hidden md:inline">Login / Register</span>
         </Link>
       )}
-    </div>
+    </>
   );
 };

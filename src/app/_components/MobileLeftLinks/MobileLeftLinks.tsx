@@ -1,5 +1,6 @@
-import { HiOutlineSearch, HiMenu } from "react-icons/hi";
+import { HiMenu } from "react-icons/hi";
 import React from "react";
+import { SearchLink } from "../RightLinks/SearchLink/SearchLink";
 
 export const MobileLeftLinks = () => {
   return (
@@ -9,10 +10,8 @@ export const MobileLeftLinks = () => {
           <HiMenu className="text-2xl" />
         </button>
       </li>
-      <li>
-        <button className="p-1 ml-2">
-          <HiOutlineSearch className="text-2xl" />
-        </button>
+      <li className="relative">
+        <SearchLink variant="mobile" />
       </li>
     </ul>
   );
