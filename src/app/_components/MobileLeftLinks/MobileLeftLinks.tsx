@@ -1,14 +1,12 @@
-import { HiMenu } from "react-icons/hi";
 import React from "react";
 import { SearchLink } from "../RightLinks/SearchLink/SearchLink";
+import { MobileMainMenu } from "../MobileMainMenu/MobileMainMenu";
 
 export const MobileLeftLinks = () => {
   return (
     <ul className="flex lg:hidden">
       <li>
-        <button className="p-1">
-          <HiMenu className="text-2xl" />
-        </button>
+        <MobileMainMenu />
       </li>
       <li className="relative">
         <SearchLink variant="mobile" />
