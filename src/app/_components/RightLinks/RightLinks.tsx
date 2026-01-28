@@ -1,8 +1,7 @@
-import { HiOutlineShoppingBag } from "react-icons/hi";
 import React from "react";
-import Link from "next/link";
 import { AccountLink } from "./AccountLink/AccountLink";
 import { SearchLink } from "./SearchLink/SearchLink";
+import { CartLink } from "./CartLink/CartLink";
 
 export const RightLinks = () => {
   return (
@@ -14,9 +13,7 @@ export const RightLinks = () => {
         <AccountLink />
       </li>
       <li className="flex justify-center items-center">
-        <Link href="/cart" className="p-1 inline-flex">
-          <HiOutlineShoppingBag className="text-2xl" />
-        </Link>
+        <CartLink />
       </li>
     </ul>
   );
