@@ -2,14 +2,10 @@ import { getProduct } from "@/integrations/shopify/product";
 import { ImageGrid } from "./_components/ImageGrid";
 import { ProductBadge } from "./_components/ProductBadge";
 import { ProductDescription } from "./_components/ProductDescription";
-import { ProductFit } from "./_components/ProductFit";
 import { ProductPrice } from "./_components/ProductPrice";
-import { ProductRating } from "./_components/ProductRating";
 import { ProductTitle } from "./_components/ProductTitle";
 import { SimilarItems } from "./_components/SimilarItems";
-// import { ProductColorSelector } from "./_components/ProductColorSelector";
-// import { ProductSizeSelector } from "./_components/ProductSizeSelector";
-// import { AddToCartButton } from "./_components/AddToCartButton";
+import { ProductActions } from "./_components/ProductActions";
 import { getProductDisplayData } from "./_functions/getProductDisplayData";
 
 // Mock product data
@@ -74,9 +70,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const data = await getProduct({ handle });
 
-  // const [selectedColor, setSelectedColor] = useState<string | null>(null);
-  // const [selectedSize, setSelectedSize] = useState<string | null>(null);
-
   if (!data?.product) {
     return <div>Product not found</div>;
   }
@@ -86,6 +79,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
     formattedPrice,
     images,
     description,
+    colors,
+    sizes,
   } = getProductDisplayData(data);
 
   return (
@@ -102,23 +97,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <ProductTitle title={productTitle} />
           <div className="flex items-center gap-4 flex-wrap">
             <ProductPrice price={formattedPrice} />
-            <ProductRating
+            {/* <ProductRating
               rating={mockProduct.rating}
               reviewCount={mockProduct.reviewCount}
-            />
+            /> */}
           </div>
-          {/* <ProductColorSelector
-            colors={mockProduct.colors}
-            selectedColor={selectedColor}
-            onColorChange={setSelectedColor}
-          /> */}
-          <ProductFit fit={mockProduct.fit} />
-          {/* <ProductSizeSelector
-            sizes={mockProduct.sizes}
-            selectedSize={selectedSize}
-            onSizeChange={setSelectedSize}
-          />
-          <AddToCartButton disabled={!selectedSize} /> */}
+          <ProductActions colors={colors} sizes={sizes} fit={mockProduct.fit} />
           <ProductDescription description={description} />
         </div>
       </div>

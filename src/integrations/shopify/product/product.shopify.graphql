@@ -18,5 +18,34 @@ query Product($handle: String!) {
         }
       }
     }
+    options {
+      id
+      name
+      optionValues {
+        id
+        name
+        swatch {
+          color
+          image {
+            previewImage {
+              url
+            }
+          }
+        }
+      }
+    }
+    variants(first: 100) {
+      edges {
+        node {
+          id
+          title
+          availableForSale
+          selectedOptions {
+            name
+            value
+          }
+        }
+      }
+    }
   }
 }
