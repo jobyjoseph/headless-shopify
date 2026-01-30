@@ -1,7 +1,7 @@
 import * as React from "react";
 import type { Metadata, Viewport } from "next";
 import { Josefin_Sans } from "next/font/google";
-import ThemeProvider from "@/context/theme-provider";
+import ThemeProvider from "@/providers/theme-provider";
 import { SessionProvider } from "next-auth/react";
 import "./global.scss";
 import { Header } from "./_components/Header/Header";

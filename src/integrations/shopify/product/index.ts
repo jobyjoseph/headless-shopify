@@ -5,8 +5,8 @@ import {
 } from "@/generated/shopifySchemaTypes";
 import createApolloClient from "@/integrations/shopify/shopify-apollo-client";
 
-export const product = async (
-  input: ProductQueryVariables
+export const getProduct = async (
+  input: ProductQueryVariables,
 ): Promise<ProductQuery | null> => {
   try {
     const { handle } = input;
@@ -20,8 +20,7 @@ export const product = async (
     });
 
     if (!data) {
-      const errorMessage = `No data returned for product with handle: ${handle}`;
-      throw new Error(errorMessage);
+      throw new Error("No data returned from product query");
     }
 
     return data;

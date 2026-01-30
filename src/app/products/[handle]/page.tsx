@@ -1,21 +1,19 @@
-"use client";
-
-import React, { useState } from "react";
-import { AddToCartButton } from "./_components/AddToCartButton";
+import { getProduct } from "@/integrations/shopify/product";
 import { ImageGrid } from "./_components/ImageGrid";
 import { ProductBadge } from "./_components/ProductBadge";
-import { ProductColorSelector } from "./_components/ProductColorSelector";
 import { ProductDescription } from "./_components/ProductDescription";
 import { ProductFit } from "./_components/ProductFit";
 import { ProductPrice } from "./_components/ProductPrice";
 import { ProductRating } from "./_components/ProductRating";
-import { ProductSizeSelector } from "./_components/ProductSizeSelector";
 import { ProductTitle } from "./_components/ProductTitle";
 import { SimilarItems } from "./_components/SimilarItems";
+// import { ProductColorSelector } from "./_components/ProductColorSelector";
+// import { ProductSizeSelector } from "./_components/ProductSizeSelector";
+// import { AddToCartButton } from "./_components/AddToCartButton";
+import { getProductDisplayData } from "./_functions/getProductDisplayData";
 
 // Mock product data
 const mockProduct = {
-  title: "Seamless Ribbed Favorite Bra Tank",
   price: "$72.00",
   rating: 4.6,
   reviewCount: 128,
@@ -30,24 +28,6 @@ const mockProduct = {
   fit: "True to Size",
   description:
     "A seamless ribbed bra tank that combines comfort with style. Features a built-in shelf bra for light support, moisture-wicking fabric to keep you cool, and a flattering fit that moves with you from studio to street. The soft, stretchy ribbed fabric hugs your curves without digging in, while the seamless construction eliminates irritation for all-day comfort. Perfect for yoga, pilates, or everyday wear, this versatile tank pairs beautifully with high-waisted leggings or jeans. Machine washable and designed to maintain its shape wash after wash.",
-  images: [
-    {
-      src: "https://cdn.shopify.com/s/files/1/2185/2813/files/W9730R_06661_b1_s1_a2_m262_750x.jpg?v=1768295294",
-      alt: "Seamless Ribbed Favorite Bra Tank - Front",
-    },
-    {
-      src: "https://cdn.shopify.com/s/files/1/2185/2813/files/W9730R_06661_b1_s1_a4_m262_750x.jpg?v=1768411153",
-      alt: "Seamless Ribbed Favorite Bra Tank - Side",
-    },
-    {
-      src: "https://cdn.shopify.com/s/files/1/2185/2813/files/W9730R_06661_b1_s1_a3_m262_750x.jpg?v=1768411153",
-      alt: "Seamless Ribbed Favorite Bra Tank - Back",
-    },
-    {
-      src: "https://cdn.shopify.com/s/files/1/2185/2813/files/W9730R_06661_b1_s1_a5_m262_750x.jpg?v=1768295294",
-      alt: "Seamless Ribbed Favorite Bra Tank - Detail",
-    },
-  ],
 };
 
 const similarProducts = [
@@ -85,43 +65,61 @@ const similarProducts = [
   },
 ];
 
-export default function ProductPage() {
-  const product = mockProduct;
-  const [selectedColor, setSelectedColor] = useState(product.colors[0].name);
-  const [selectedSize, setSelectedSize] = useState("");
+interface ProductPageProps {
+  params: Promise<{ handle: string }>;
+}
+
+export default async function ProductPage({ params }: ProductPageProps) {
+  const { handle } = await params;
+
+  const data = await getProduct({ handle });
+
+  // const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  // const [selectedSize, setSelectedSize] = useState<string | null>(null);
+
+  if (!data?.product) {
+    return <div>Product not found</div>;
+  }
+
+  const {
+    title: productTitle,
+    formattedPrice,
+    images,
+    description,
+  } = getProductDisplayData(data);
 
   return (
     <main className="px-5 py-8 lg:px-10 lg:py-12">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
         {/* Image Grid - 2/3 width */}
         <div className="lg:col-span-2">
-          <ImageGrid images={product.images} />
+          <ImageGrid images={images} />
         </div>
 
-        {/* Product Title - 1/3 width */}
+        {/* Product Details - 1/3 width */}
         <div className="lg:col-span-1">
           <ProductBadge text="Bestseller" />
-          <ProductTitle title={product.title} />
+          <ProductTitle title={productTitle} />
           <div className="flex items-center gap-4 flex-wrap">
-            <ProductPrice price={product.price} />
+            <ProductPrice price={formattedPrice} />
             <ProductRating
-              rating={product.rating}
-              reviewCount={product.reviewCount}
+              rating={mockProduct.rating}
+              reviewCount={mockProduct.reviewCount}
             />
           </div>
-          <ProductColorSelector
-            colors={product.colors}
+          {/* <ProductColorSelector
+            colors={mockProduct.colors}
             selectedColor={selectedColor}
             onColorChange={setSelectedColor}
-          />
-          <ProductFit fit={product.fit} />
-          <ProductSizeSelector
-            sizes={product.sizes}
+          /> */}
+          <ProductFit fit={mockProduct.fit} />
+          {/* <ProductSizeSelector
+            sizes={mockProduct.sizes}
             selectedSize={selectedSize}
             onSizeChange={setSelectedSize}
           />
-          <AddToCartButton disabled={!selectedSize} />
-          <ProductDescription description={product.description} />
+          <AddToCartButton disabled={!selectedSize} /> */}
+          <ProductDescription description={description} />
         </div>
       </div>
 
