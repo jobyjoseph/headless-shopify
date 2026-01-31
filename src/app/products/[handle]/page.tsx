@@ -81,6 +81,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     description,
     colors,
     sizes,
+    variants,
   } = getProductDisplayData(data);
 
   return (
@@ -102,7 +103,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
               reviewCount={mockProduct.reviewCount}
             /> */}
           </div>
-          <ProductActions colors={colors} sizes={sizes} fit={mockProduct.fit} />
+          <ProductActions
+            colors={colors}
+            sizes={sizes}
+            fit={mockProduct.fit}
+            variants={variants}
+          />
           <ProductDescription description={description} />
         </div>
       </div>

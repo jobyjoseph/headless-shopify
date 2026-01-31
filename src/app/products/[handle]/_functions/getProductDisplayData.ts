@@ -10,6 +10,16 @@ interface ColorOption {
   value: string;
 }
 
+interface ProductVariant {
+  id: string;
+  title: string;
+  availableForSale: boolean;
+  selectedOptions: Array<{
+    name: string;
+    value: string;
+  }>;
+}
+
 interface ProductDisplayData {
   title: string;
   formattedPrice: string;
@@ -17,6 +27,7 @@ interface ProductDisplayData {
   description: string;
   colors: ColorOption[];
   sizes: string[];
+  variants: ProductVariant[];
 }
 
 // Color name to hex mapping for common colors
@@ -129,6 +140,18 @@ export function getProductDisplayData(data: ProductQuery): ProductDisplayData {
     });
   }
 
+  // Extract variants
+  const variants: ProductVariant[] =
+    data.product.variants?.edges?.map((edge) => ({
+      id: edge.node.id,
+      title: edge.node.title,
+      availableForSale: edge.node.availableForSale,
+      selectedOptions: edge.node.selectedOptions.map((opt) => ({
+        name: opt.name,
+        value: opt.value,
+      })),
+    })) || [];
+
   return {
     title,
     formattedPrice,
@@ -136,5 +159,6 @@ export function getProductDisplayData(data: ProductQuery): ProductDisplayData {
     description,
     colors,
     sizes,
+    variants,
   };
 }
