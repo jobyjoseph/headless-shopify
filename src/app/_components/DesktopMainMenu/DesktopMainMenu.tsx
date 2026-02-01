@@ -1,20 +1,24 @@
 import Link from "next/link";
+import { normalizeMenuUrl } from "@/utils/normalizeMenuUrl";
 
-export const DesktopMainMenu = () => {
+interface MenuItem {
+  id: string;
+  title: string;
+  url: string;
+}
+
+interface DesktopMainMenuProps {
+  menuItems: MenuItem[];
+}
+
+export const DesktopMainMenu = ({ menuItems }: DesktopMainMenuProps) => {
   return (
     <ul className="hidden lg:flex justify-self-start gap-8 text-lg">
-      <li>
-        <Link href="/collections/women">Women</Link>
-      </li>
-      <li>
-        <Link href="/collections/men">Men</Link>
-      </li>
-      <li>
-        <Link href="/collections/kids">Kids</Link>
-      </li>
-      <li>
-        <Link href="/collections/accessories">Accessories</Link>
-      </li>
+      {menuItems.map((item) => (
+        <li key={item.id}>
+          <Link href={normalizeMenuUrl(item.url)}>{item.title}</Link>
+        </li>
+      ))}
     </ul>
   );
 };

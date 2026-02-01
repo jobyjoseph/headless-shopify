@@ -2,8 +2,19 @@
 import { HiMenu, HiX } from "react-icons/hi";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { normalizeMenuUrl } from "@/utils/normalizeMenuUrl";
 
-export const MobileMainMenu = () => {
+interface MenuItem {
+  id: string;
+  title: string;
+  url: string;
+}
+
+interface MobileMainMenuProps {
+  menuItems: MenuItem[];
+}
+
+export const MobileMainMenu = ({ menuItems }: MobileMainMenuProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -39,38 +50,16 @@ export const MobileMainMenu = () => {
           </div>
           <nav className="flex-1 p-4">
             <ul className="flex flex-col gap-4 text-lg">
-              <li>
-                <Link
-                  href="/collections/women"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Women
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/collections/men"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Men
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/collections/kids"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Kids
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/collections/accessories"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Accessories
-                </Link>
-              </li>
+              {menuItems.map((item) => (
+                <li key={item.id}>
+                  <Link
+                    href={normalizeMenuUrl(item.url)}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.title}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </nav>
         </div>
