@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { ProductColorSelector } from "./ProductColorSelector";
-import { ProductFit } from "./ProductFit";
 import { ProductSizeSelector } from "./ProductSizeSelector";
 import { AddToCartButton } from "./AddToCartButton";
 import { useCart } from "@/providers/cart-provider";
@@ -25,14 +24,12 @@ interface ProductVariant {
 interface ProductActionsProps {
   colors: ColorOption[];
   sizes: string[];
-  fit: string;
   variants: ProductVariant[];
 }
 
 export const ProductActions = ({
   colors,
   sizes,
-  fit,
   variants,
 }: ProductActionsProps) => {
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
@@ -99,7 +96,6 @@ export const ProductActions = ({
         selectedColor={selectedColor || ""}
         onColorChange={setSelectedColor}
       />
-      <ProductFit fit={fit} />
       <ProductSizeSelector
         sizes={sizes}
         selectedSize={selectedSize || ""}

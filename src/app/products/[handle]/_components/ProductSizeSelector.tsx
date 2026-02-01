@@ -13,11 +13,8 @@ export const ProductSizeSelector = ({
 }: ProductSizeSelectorProps) => {
   return (
     <div className="mt-6">
-      <div className="flex items-center justify-between mb-3">
+      <div className="mb-3">
         <span className=" font-light text-gray-900">Size</span>
-        <button className="font-light text-gray-600 underline hover:text-gray-900 cursor-pointer">
-          Size Guide
-        </button>
       </div>
       <div className="grid grid-cols-6 gap-2">
         {sizes.map((size) => (

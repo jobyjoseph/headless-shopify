@@ -8,24 +8,6 @@ import { SimilarItems } from "./_components/SimilarItems";
 import { ProductActions } from "./_components/ProductActions";
 import { getProductDisplayData } from "./_functions/getProductDisplayData";
 
-// Mock product data
-const mockProduct = {
-  price: "$72.00",
-  rating: 4.6,
-  reviewCount: 128,
-  colors: [
-    { name: "Black", value: "#000000" },
-    { name: "White", value: "#FFFFFF" },
-    { name: "Navy", value: "#1e3a5f" },
-    { name: "Burgundy", value: "#800020" },
-    { name: "Olive", value: "#556B2F" },
-  ],
-  sizes: ["XXS", "XS", "S", "M", "L", "XL"],
-  fit: "True to Size",
-  description:
-    "A seamless ribbed bra tank that combines comfort with style. Features a built-in shelf bra for light support, moisture-wicking fabric to keep you cool, and a flattering fit that moves with you from studio to street. The soft, stretchy ribbed fabric hugs your curves without digging in, while the seamless construction eliminates irritation for all-day comfort. Perfect for yoga, pilates, or everyday wear, this versatile tank pairs beautifully with high-waisted leggings or jeans. Machine washable and designed to maintain its shape wash after wash.",
-};
-
 const similarProducts = [
   {
     id: "1",
@@ -103,12 +85,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               reviewCount={mockProduct.reviewCount}
             /> */}
           </div>
-          <ProductActions
-            colors={colors}
-            sizes={sizes}
-            fit={mockProduct.fit}
-            variants={variants}
-          />
+          <ProductActions colors={colors} sizes={sizes} variants={variants} />
           <ProductDescription description={description} />
         </div>
       </div>
