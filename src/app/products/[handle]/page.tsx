@@ -8,6 +8,7 @@ import { SimilarItems } from "./_components/SimilarItems";
 import { ProductActions } from "./_components/ProductActions";
 import { getProductDisplayData } from "./_functions/getProductDisplayData";
 import { DemoStoreNotice } from "./_components/DemoStoreNotice";
+import type { Metadata } from "next";
 
 const similarProducts = [
   {
@@ -46,6 +47,25 @@ const similarProducts = [
 
 interface ProductPageProps {
   params: Promise<{ handle: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: ProductPageProps): Promise<Metadata> {
+  const { handle } = await params;
+  const data = await getProduct({ handle });
+
+  if (!data?.product) {
+    return {
+      title: "Product Not Found - Headless",
+    };
+  }
+
+  const { title: productTitle } = getProductDisplayData(data);
+
+  return {
+    title: `${productTitle} - Headless`,
+  };
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
