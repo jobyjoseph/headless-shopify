@@ -7,6 +7,7 @@ import { ProductTitle } from "./_components/ProductTitle";
 import { SimilarItems } from "./_components/SimilarItems";
 import { ProductActions } from "./_components/ProductActions";
 import { getProductDisplayData } from "./_functions/getProductDisplayData";
+import { DemoStoreNotice } from "./_components/DemoStoreNotice";
 
 const similarProducts = [
   {
@@ -87,6 +88,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             /> */}
           </div>
           <ProductActions colors={colors} sizes={sizes} variants={variants} />
+          <DemoStoreNotice />
           <ProductDescription description={description} />
         </div>
       </div>
