@@ -8,8 +8,7 @@ import { Pagination } from "@/components/Pagination/Pagination";
 // Placeholder data - will be replaced with Shopify API data
 const placeholderCollection = {
   title: "All Products",
-  description:
-    "Discover our complete collection of premium products.",
+  description: "Discover our complete collection of premium products.",
   productsCount: 16,
   products: [
     {
@@ -205,4 +204,3 @@ export default function CollectionsPage() {
     </main>
   );
 }
-
