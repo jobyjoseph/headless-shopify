@@ -28,6 +28,7 @@ interface ProductDisplayData {
   colors: ColorOption[];
   sizes: string[];
   variants: ProductVariant[];
+  badge?: string;
 }
 
 // Color name to hex mapping for common colors
@@ -152,6 +153,10 @@ export function getProductDisplayData(data: ProductQuery): ProductDisplayData {
       })),
     })) || [];
 
+  // Extract badge from tags
+  const badgeTag = data.product.tags?.find((tag) => tag.startsWith("badge:"));
+  const badge = badgeTag ? badgeTag.replace("badge:", "") : undefined;
+
   return {
     title,
     formattedPrice,
@@ -160,5 +165,6 @@ export function getProductDisplayData(data: ProductQuery): ProductDisplayData {
     colors,
     sizes,
     variants,
+    badge,
   };
 }

@@ -64,6 +64,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     colors,
     sizes,
     variants,
+    badge,
   } = getProductDisplayData(data);
 
   return (
@@ -76,7 +77,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
         {/* Product Details - 1/3 width */}
         <div className="lg:col-span-1">
-          <ProductBadge text="Bestseller" />
+          {badge && <ProductBadge text={badge} />}
           <ProductTitle title={productTitle} />
           <div className="flex items-center gap-4 flex-wrap">
             <ProductPrice price={formattedPrice} />
