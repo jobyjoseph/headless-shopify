@@ -1,8 +1,10 @@
 import React from "react";
+import Link from "next/link";
 
 interface ColorOption {
   name: string;
   value: string;
+  handle?: string; // Product handle for this color variant
 }
 
 interface ProductColorSelectorProps {
@@ -25,9 +27,11 @@ export const ProductColorSelector = ({
       <div className="flex gap-2">
         {colors.map((color) => {
           const isWhite = color.name.toLowerCase() === "white";
+          const href = color.handle ? `/products/${color.handle}` : "#";
           return (
-            <button
+            <Link
               key={color.name}
+              href={href}
               onClick={() => onColorChange(color.name)}
               className={`w-8 h-8 rounded-full transition-all cursor-pointer ${
                 selectedColor === color.name

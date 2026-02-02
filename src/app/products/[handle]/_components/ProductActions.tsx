@@ -9,6 +9,7 @@ import { useCart } from "@/providers/cart-provider";
 interface ColorOption {
   name: string;
   value: string;
+  handle?: string;
 }
 
 interface ProductVariant {
@@ -25,14 +26,18 @@ interface ProductActionsProps {
   colors: ColorOption[];
   sizes: string[];
   variants: ProductVariant[];
+  currentColor?: string | null;
 }
 
 export const ProductActions = ({
   colors,
   sizes,
   variants,
+  currentColor,
 }: ProductActionsProps) => {
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [selectedColor, setSelectedColor] = useState<string | null>(
+    currentColor || null,
+  );
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const { addToCart } = useCart();
