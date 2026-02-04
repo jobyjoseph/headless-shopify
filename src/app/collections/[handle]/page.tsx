@@ -1,8 +1,6 @@
-import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { getCollectionByHandle } from "@/integrations/shopify/collection-by-handle";
-import { CollectionPagination } from "./_components/CollectionPagination";
 
 interface ProductTileProps {
   product: {
@@ -38,28 +36,17 @@ const ProductTile = ({ product }: ProductTileProps) => {
 
 interface CollectionPageProps {
   params: Promise<{ handle: string }>;
-  searchParams: Promise<{ page?: string }>;
 }
 
-export default async function CollectionPage({
-  params,
-  searchParams,
-}: CollectionPageProps) {
+export default async function CollectionPage({ params }: CollectionPageProps) {
   const { handle } = await params;
-  const { page } = await searchParams;
-  const parsedPage = page ? Number(page) : 1;
-  const currentPage = Number.isNaN(parsedPage) ? 1 : parsedPage;
   const collection = await getCollectionByHandle({
     handle,
-    first: 16,
-    page: currentPage,
   });
 
   if (!collection) {
     return <div>Collection not found</div>;
   }
-
-  const hasPreviousPage = collection.hasPreviousPage;
 
   return (
     <main className="px-5 py-8 lg:px-10 lg:py-12">
@@ -69,6 +56,9 @@ export default async function CollectionPage({
           {collection.title}
         </h1>
         <p className="text-gray-600 mb-3">{collection.description}</p>
+        <p className="text-sm text-gray-500">
+          {collection.productsCount} products
+        </p>
       </div>
 
       {/* Products Grid */}
@@ -77,14 +67,6 @@ export default async function CollectionPage({
           <ProductTile key={product.id} product={product} />
         ))}
       </div>
-
-      {collection.hasNextPage || hasPreviousPage ? (
-        <CollectionPagination
-          currentPage={currentPage}
-          hasNextPage={collection.hasNextPage}
-          hasPreviousPage={hasPreviousPage}
-        />
-      ) : null}
     </main>
   );
 }

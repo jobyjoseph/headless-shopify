@@ -6,7 +6,7 @@ export function DemoStoreNotice() {
         href="https://alo.com"
         target="_blank"
         rel="noopener"
-        className="font-normal hover:underline"
+        className="font-normal hover:underline text-black"
       >
         alo
       </a>

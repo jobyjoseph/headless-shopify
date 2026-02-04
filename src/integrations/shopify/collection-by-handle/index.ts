@@ -15,21 +15,17 @@ interface GetCollectionByHandleInput {
 
 export const getCollectionByHandle = cache(
   async (input: GetCollectionByHandleInput) => {
-    const { handle, first = 16, page = 1 } = input;
-    const currentPage = page < 1 ? 1 : page;
+    const { handle } = input;
     let hasNextPage = true;
     let after: string | null = null;
     let collectionData: CollectionByHandleQuery["collection"] | null = null;
-    let pageEdges: NonNullable<
+    let allEdges: NonNullable<
       CollectionByHandleQuery["collection"]
     >["products"]["edges"] = [];
-    let pageHasNext = false;
-    let pageHasPrevious = false;
 
     const client = createApolloClient();
 
-    let current = 1;
-    while (hasNextPage && current <= currentPage) {
+    while (hasNextPage) {
       const { data } = await client.query<
         CollectionByHandleQuery,
         CollectionByHandleQueryVariables
@@ -37,7 +33,7 @@ export const getCollectionByHandle = cache(
         query: CollectionByHandleDocument,
         variables: {
           handle,
-          first,
+          first: 250,
           after,
         },
       });
@@ -47,15 +43,11 @@ export const getCollectionByHandle = cache(
       }
 
       collectionData = data.collection;
-      if (current === currentPage) {
-        pageEdges = data.collection.products.edges;
-        pageHasNext = data.collection.products.pageInfo.hasNextPage;
-        pageHasPrevious = data.collection.products.pageInfo.hasPreviousPage;
-      }
+
+      allEdges = [...allEdges, ...data.collection.products.edges];
 
       hasNextPage = data.collection.products.pageInfo.hasNextPage;
       after = data.collection.products.pageInfo.endCursor ?? null;
-      current += 1;
     }
 
     if (!collectionData) {
@@ -66,10 +58,8 @@ export const getCollectionByHandle = cache(
       id: collectionData.id,
       title: collectionData.title,
       description: collectionData.description,
-      currentPage,
-      hasNextPage: pageHasNext,
-      hasPreviousPage: pageHasPrevious,
-      products: pageEdges.map(({ node: product }) => ({
+      productsCount: allEdges.length,
+      products: allEdges.map(({ node: product }) => ({
         id: product.id,
         title: product.title,
         handle: product.handle,
