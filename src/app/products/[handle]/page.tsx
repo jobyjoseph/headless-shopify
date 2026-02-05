@@ -146,7 +146,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
       </div>
 
-      <SimilarItems products={similarProducts} />
+      {/* <SimilarItems products={similarProducts} /> */}
     </main>
   );
 }
