@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/providers/cart-provider";
@@ -17,9 +18,11 @@ interface CartItemProps {
     handle: string;
     currency: string;
   };
+  onUpdateQuantity: (id: string, quantity: number) => void;
+  isUpdating: boolean;
 }
 
-const CartItem = ({ item }: CartItemProps) => {
+const CartItem = ({ item, onUpdateQuantity, isUpdating }: CartItemProps) => {
   return (
     <div className="flex gap-4 py-6 border-b border-gray-200">
       <Link
@@ -44,9 +47,27 @@ const CartItem = ({ item }: CartItemProps) => {
             {item.title}
           </Link>
           <p className="text-sm text-gray-500 mt-1">{item.variant}</p>
-          <div className="flex items-center gap-3 mt-3">
-            <span className="text-sm text-gray-600">Qty</span>
+          <div className="flex items-center gap-1.5 mt-3">
+            <button
+              onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
+              className="w-8 h-8 flex items-center justify-center border border-gray-300 text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer text-lg disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+              disabled={item.quantity <= 1 || isUpdating}
+              aria-label="Decrease quantity"
+            >
+              −
+            </button>
             <span className="w-8 text-center">{item.quantity}</span>
+            <button
+              onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
+              className="w-8 h-8 flex items-center justify-center border border-gray-300 text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer text-lg"
+              disabled={isUpdating}
+              aria-label="Increase quantity"
+            >
+              +
+            </button>
+            {isUpdating ? (
+              <span className="text-xs text-gray-500">Updating...</span>
+            ) : null}
           </div>
         </div>
       </div>
@@ -60,7 +81,8 @@ const CartItem = ({ item }: CartItemProps) => {
 };
 
 export default function CartPage() {
-  const { cart, loading, error, refreshCart } = useCart();
+  const { cart, loading, error, refreshCart, updateCartLine } = useCart();
+  const [updatingLineId, setUpdatingLineId] = useState<string | null>(null);
   const cartLines = cart?.lines?.edges ?? [];
   const items = cartLines
     .map((edge) => {
@@ -105,6 +127,16 @@ export default function CartPage() {
         cart.cost.totalAmount.currencyCode,
       )
     : "";
+
+  const handleUpdateQuantity = async (lineId: string, quantity: number) => {
+    if (quantity < 1) return;
+    try {
+      setUpdatingLineId(lineId);
+      await updateCartLine(lineId, quantity);
+    } finally {
+      setUpdatingLineId(null);
+    }
+  };
 
   return (
     <main className="px-5 py-8 lg:px-10 lg:py-12">
@@ -156,7 +188,12 @@ export default function CartPage() {
           <div className="lg:col-span-2">
             <div className="border-t border-gray-200">
               {items.map((item) => (
-                <CartItem key={item.id} item={item} />
+                <CartItem
+                  key={item.id}
+                  item={item}
+                  onUpdateQuantity={handleUpdateQuantity}
+                  isUpdating={updatingLineId === item.id}
+                />
               ))}
             </div>
             <Link

@@ -12,9 +12,11 @@ import Cookies from "js-cookie";
 import { getCart } from "@/integrations/shopify/cart";
 import { createCart } from "@/integrations/shopify/cart-create";
 import { cartLinesAdd } from "@/integrations/shopify/cart-lines-add";
+import { cartLinesUpdate } from "@/integrations/shopify/cart-lines-update";
 import type {
   GetCartQuery,
   CartLineInput,
+  CartLineUpdateInput,
 } from "@/generated/shopifySchemaTypes";
 
 const CART_ID_COOKIE_NAME = "cart_id";
@@ -42,6 +44,7 @@ interface CartContextType {
   error: string | null;
   refreshCart: () => Promise<void>;
   addToCart: (lines: CartLineInput[]) => Promise<void>;
+  updateCartLine: (lineId: string, quantity: number) => Promise<void>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -134,6 +137,41 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [cart],
   );
 
+  const updateCartLine = useCallback(
+    async (lineId: string, quantity: number) => {
+      try {
+        setError(null);
+
+        const currentCartId = cart?.id || getCartId();
+        if (!currentCartId) {
+          throw new Error("No cart available");
+        }
+
+        const result = await cartLinesUpdate(currentCartId, [
+          {
+            id: lineId,
+            quantity,
+          } as CartLineUpdateInput,
+        ]);
+
+        if (result?.userErrors && result.userErrors.length > 0) {
+          throw new Error(
+            result.userErrors[0]?.message || "Failed to update cart",
+          );
+        }
+
+        if (result?.cart) {
+          setCart(result.cart);
+        }
+      } catch (err) {
+        console.error("Failed to update cart:", err);
+        setError(err instanceof Error ? err.message : "Failed to update cart");
+        throw err;
+      }
+    },
+    [cart],
+  );
+
   // Load cart on mount
   useEffect(() => {
     refreshCart();
@@ -147,6 +185,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         error,
         refreshCart,
         addToCart,
+        updateCartLine,
       }}
     >
       {children}
