@@ -13,6 +13,7 @@ import { getCart } from "@/integrations/shopify/cart";
 import { createCart } from "@/integrations/shopify/cart-create";
 import { cartLinesAdd } from "@/integrations/shopify/cart-lines-add";
 import { cartLinesUpdate } from "@/integrations/shopify/cart-lines-update";
+import { cartLinesRemove } from "@/integrations/shopify/cart-lines-remove";
 import type {
   GetCartQuery,
   CartLineInput,
@@ -45,6 +46,7 @@ interface CartContextType {
   refreshCart: () => Promise<void>;
   addToCart: (lines: CartLineInput[]) => Promise<void>;
   updateCartLine: (lineId: string, quantity: number) => Promise<void>;
+  removeCartLine: (lineId: string) => Promise<void>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -172,6 +174,36 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [cart],
   );
 
+  const removeCartLine = useCallback(
+    async (lineId: string) => {
+      try {
+        setError(null);
+
+        const currentCartId = cart?.id || getCartId();
+        if (!currentCartId) {
+          throw new Error("No cart available");
+        }
+
+        const result = await cartLinesRemove(currentCartId, [lineId]);
+
+        if (result?.userErrors && result.userErrors.length > 0) {
+          throw new Error(
+            result.userErrors[0]?.message || "Failed to remove item",
+          );
+        }
+
+        if (result?.cart) {
+          setCart(result.cart);
+        }
+      } catch (err) {
+        console.error("Failed to remove cart item:", err);
+        setError(err instanceof Error ? err.message : "Failed to remove item");
+        throw err;
+      }
+    },
+    [cart],
+  );
+
   // Load cart on mount
   useEffect(() => {
     refreshCart();
@@ -186,6 +218,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         refreshCart,
         addToCart,
         updateCartLine,
+        removeCartLine,
       }}
     >
       {children}

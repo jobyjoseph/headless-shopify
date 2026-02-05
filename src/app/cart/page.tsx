@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/providers/cart-provider";
@@ -19,10 +19,18 @@ interface CartItemProps {
     currency: string;
   };
   onUpdateQuantity: (id: string, quantity: number) => void;
+  onRemove: (id: string) => void;
   isUpdating: boolean;
+  isRemoving: boolean;
 }
 
-const CartItem = ({ item, onUpdateQuantity, isUpdating }: CartItemProps) => {
+const CartItem = ({
+  item,
+  onUpdateQuantity,
+  onRemove,
+  isUpdating,
+  isRemoving,
+}: CartItemProps) => {
   return (
     <div className="flex gap-4 py-6 border-b border-gray-200">
       <Link
@@ -51,7 +59,7 @@ const CartItem = ({ item, onUpdateQuantity, isUpdating }: CartItemProps) => {
             <button
               onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
               className="w-8 h-8 flex items-center justify-center border border-gray-300 text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer text-lg disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
-              disabled={item.quantity <= 1 || isUpdating}
+              disabled={item.quantity <= 1 || isUpdating || isRemoving}
               aria-label="Decrease quantity"
             >
               −
@@ -60,7 +68,7 @@ const CartItem = ({ item, onUpdateQuantity, isUpdating }: CartItemProps) => {
             <button
               onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
               className="w-8 h-8 flex items-center justify-center border border-gray-300 text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer text-lg"
-              disabled={isUpdating}
+              disabled={isUpdating || isRemoving}
               aria-label="Increase quantity"
             >
               +
@@ -70,6 +78,13 @@ const CartItem = ({ item, onUpdateQuantity, isUpdating }: CartItemProps) => {
             ) : null}
           </div>
         </div>
+        <button
+          onClick={() => onRemove(item.id)}
+          className="text-sm text-gray-500 hover:text-gray-900 underline transition-colors mt-3 w-fit cursor-pointer disabled:cursor-not-allowed"
+          disabled={isRemoving || isUpdating}
+        >
+          {isRemoving ? "Removing..." : "Remove"}
+        </button>
       </div>
       <div className="text-right">
         <p className="font-normal text-gray-900">
@@ -81,8 +96,10 @@ const CartItem = ({ item, onUpdateQuantity, isUpdating }: CartItemProps) => {
 };
 
 export default function CartPage() {
-  const { cart, loading, error, refreshCart, updateCartLine } = useCart();
+  const { cart, loading, error, refreshCart, updateCartLine, removeCartLine } =
+    useCart();
   const [updatingLineId, setUpdatingLineId] = useState<string | null>(null);
+  const [removingLineId, setRemovingLineId] = useState<string | null>(null);
   const cartLines = cart?.lines?.edges ?? [];
   const items = cartLines
     .map((edge) => {
@@ -135,6 +152,15 @@ export default function CartPage() {
       await updateCartLine(lineId, quantity);
     } finally {
       setUpdatingLineId(null);
+    }
+  };
+
+  const handleRemoveItem = async (lineId: string) => {
+    try {
+      setRemovingLineId(lineId);
+      await removeCartLine(lineId);
+    } finally {
+      setRemovingLineId(null);
     }
   };
 
@@ -192,7 +218,9 @@ export default function CartPage() {
                   key={item.id}
                   item={item}
                   onUpdateQuantity={handleUpdateQuantity}
+                  onRemove={handleRemoveItem}
                   isUpdating={updatingLineId === item.id}
+                  isRemoving={removingLineId === item.id}
                 />
               ))}
             </div>
