@@ -31,18 +31,10 @@ export default function LoginPage() {
         return;
       }
 
-      const shopifyData = (shopifyAuth as { data?: { token?: string } })?.data;
-      if (!shopifyData?.token) {
+      const shopifyData = (shopifyAuth as { data?: { ok?: boolean } })?.data;
+      if (!shopifyData?.ok) {
         setError("Invalid email or password.");
         return;
-      }
-
-      if (shopifyData.token) {
-        const expires = new Date();
-        expires.setDate(expires.getDate() + 365);
-        document.cookie = `shopifyCustomerAccessToken=${encodeURIComponent(
-          shopifyData.token,
-        )}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
       }
 
       window.location.href = "/";

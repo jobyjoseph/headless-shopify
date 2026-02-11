@@ -19,6 +19,8 @@ export type ShopifySignUpInput = {
   autoSignIn?: boolean;
 };
 
+const SHOPIFY_CUSTOMER_TOKEN_COOKIE = "shopifyCustomerAccessToken";
+
 const signInSchema = z.object({
   email: z.email().min(1),
   password: z.string().min(1),
@@ -65,10 +67,15 @@ export const shopifyAuthPlugin = () => {
             });
           }
 
-          return ctx.json({
-            token,
-            expiresAt,
+          ctx.setCookie(SHOPIFY_CUSTOMER_TOKEN_COOKIE, token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            path: "/",
+            expires: expiresAt ? new Date(expiresAt) : undefined,
           });
+
+          return ctx.json({ ok: true });
         },
       ),
       signUp: createAuthEndpoint(
@@ -135,10 +142,17 @@ export const shopifyAuthPlugin = () => {
               });
             }
 
+            ctx.setCookie(SHOPIFY_CUSTOMER_TOKEN_COOKIE, token, {
+              httpOnly: true,
+              secure: process.env.NODE_ENV === "production",
+              sameSite: "lax",
+              path: "/",
+              expires: expiresAt ? new Date(expiresAt) : undefined,
+            });
+
             return ctx.json({
               customer,
-              token,
-              expiresAt,
+              ok: true,
             });
           }
 
