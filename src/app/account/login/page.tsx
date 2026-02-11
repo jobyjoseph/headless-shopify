@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
+import Cookies from "js-cookie";
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
@@ -35,6 +36,17 @@ export default function LoginPage() {
       if (!shopifyData?.ok) {
         setError("Invalid email or password.");
         return;
+      }
+
+      const cartId = Cookies.get("cart_id");
+      if (cartId) {
+        await fetch("/api/shopify/cart-buyer-identity", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ cartId }),
+        });
       }
 
       window.location.href = "/";

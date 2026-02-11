@@ -1,15 +1,21 @@
 "use client";
 
 import React from "react";
-import { authClient } from "@/lib/auth-client";
+import Cookies from "js-cookie";
 
 export const SignOutButton = () => {
   const handleSignOut = async () => {
     try {
-      await authClient.signOut();
+      const cartId = Cookies.get("cart_id");
+
+      await fetch("/api/shopify/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ cartId }),
+      });
     } finally {
-      document.cookie =
-        "shopifyCustomerAccessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Lax";
       window.location.href = "/";
     }
   };

@@ -45,6 +45,14 @@ mutation CartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
           }
         }
       }
+      buyerIdentity {
+        customer {
+          id
+          email
+          firstName
+          lastName
+        }
+      }
     }
     userErrors {
       field

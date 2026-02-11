@@ -1,5 +1,8 @@
-mutation CreateCart($input: CartInput!) {
-  cartCreate(input: $input) {
+mutation CartBuyerIdentityUpdate(
+  $cartId: ID!
+  $buyerIdentity: CartBuyerIdentityInput!
+) {
+  cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
     cart {
       id
       totalQuantity
@@ -46,6 +49,9 @@ mutation CreateCart($input: CartInput!) {
         }
       }
       buyerIdentity {
+        email
+        phone
+        countryCode
         customer {
           id
           email

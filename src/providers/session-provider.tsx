@@ -18,7 +18,9 @@ type SessionContextValue = {
   refresh: () => Promise<void>;
 };
 
-const SessionContext = createContext<SessionContextValue | undefined>(undefined);
+const SessionContext = createContext<SessionContextValue | undefined>(
+  undefined,
+);
 
 export function SessionProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<SessionUser>(null);

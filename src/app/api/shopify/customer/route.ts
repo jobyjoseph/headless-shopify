@@ -8,17 +8,14 @@ export async function GET() {
     const token = cookieStore.get("shopifyCustomerAccessToken")?.value;
 
     if (!token) {
-      return NextResponse.json(
-        { error: "Missing Shopify customer token." },
-        { status: 401 },
-      );
+      return NextResponse.json({ customer: null });
     }
 
     const data = await customer({ customerAccessToken: token });
     const customerData = data?.customer ?? null;
 
     if (!customerData) {
-      return NextResponse.json({ error: "Customer not found." }, { status: 404 });
+      return NextResponse.json({ customer: null });
     }
 
     return NextResponse.json({ customer: customerData });

@@ -8,6 +8,9 @@ export const getCurrentUser = async () => {
     });
 
     if (!response.ok) {
+      if (response.status === 401) {
+        return null;
+      }
       return null;
     }
 
@@ -27,8 +30,7 @@ export const getCurrentUser = async () => {
       ...customer,
       name: name || undefined,
     };
-  } catch (error) {
-    console.log("Error fetching current user:", error);
+  } catch {
     return null;
   }
 };

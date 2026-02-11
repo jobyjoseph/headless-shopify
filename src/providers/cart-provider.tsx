@@ -47,6 +47,7 @@ interface CartContextType {
   addToCart: (lines: CartLineInput[]) => Promise<void>;
   updateCartLine: (lineId: string, quantity: number) => Promise<void>;
   removeCartLine: (lineId: string) => Promise<void>;
+  updateBuyerIdentity: () => Promise<void>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -204,6 +205,39 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [cart],
   );
 
+  const updateBuyerIdentity = useCallback(async () => {
+    try {
+      setError(null);
+
+      const currentCartId = getCartId();
+      if (!currentCartId) {
+        return;
+      }
+
+      const response = await fetch("/api/shopify/cart-buyer-identity", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ cartId: currentCartId }),
+      });
+
+      if (!response.ok) {
+        return;
+      }
+
+      const data = (await response.json()) as {
+        cart?: GetCartQuery["cart"] | null;
+      };
+
+      if (data.cart) {
+        setCart(data.cart);
+      }
+    } catch (err) {
+      console.error("Failed to update buyer identity:", err);
+    }
+  }, []);
+
   // Load cart on mount
   useEffect(() => {
     refreshCart();
@@ -219,6 +253,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         addToCart,
         updateCartLine,
         removeCartLine,
+        updateBuyerIdentity,
       }}
     >
       {children}

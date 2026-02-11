@@ -44,5 +44,13 @@ query GetCart($cartId: ID!) {
         }
       }
     }
+    buyerIdentity {
+      customer {
+        id
+        email
+        firstName
+        lastName
+      }
+    }
   }
 }
