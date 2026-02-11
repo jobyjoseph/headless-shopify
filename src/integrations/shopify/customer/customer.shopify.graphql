@@ -4,5 +4,6 @@ query Customer($customerAccessToken: String!) {
     firstName
     lastName
     email
+    phone
   }
 }
