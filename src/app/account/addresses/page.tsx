@@ -39,6 +39,8 @@ export default function AddressesPage() {
   const [formError, setFormError] = useState<string | null>(null);
   const [formSuccess, setFormSuccess] = useState<string | null>(null);
   const [settingDefault, setSettingDefault] = useState<string | null>(null);
+  const [editingAddressId, setEditingAddressId] = useState<string | null>(null);
+  const [deletingAddressId, setDeletingAddressId] = useState<string | null>(null);
   const [formData, setFormData] = useState<NewAddressForm>({
     firstName: "",
     lastName: "",
@@ -132,30 +134,56 @@ export default function AddressesPage() {
     try {
       setSaving(true);
       const response = await fetch("/api/shopify/customer-addresses", {
-        method: "POST",
+        method: editingAddressId ? "PUT" : "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          address1: formData.address1,
-          address2: formData.address2 || undefined,
-          city: formData.city || undefined,
-          province: formData.province || undefined,
-          zip: formData.zip || undefined,
-          country: formData.country || undefined,
-          phone: formData.phone || undefined,
-        }),
+        body: JSON.stringify(
+          editingAddressId
+            ? {
+                addressId: editingAddressId,
+                address: {
+                  firstName: formData.firstName,
+                  lastName: formData.lastName,
+                  address1: formData.address1,
+                  address2: formData.address2 || undefined,
+                  city: formData.city || undefined,
+                  province: formData.province || undefined,
+                  zip: formData.zip || undefined,
+                  country: formData.country || undefined,
+                  phone: formData.phone || undefined,
+                },
+              }
+            : {
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                address1: formData.address1,
+                address2: formData.address2 || undefined,
+                city: formData.city || undefined,
+                province: formData.province || undefined,
+                zip: formData.zip || undefined,
+                country: formData.country || undefined,
+                phone: formData.phone || undefined,
+              },
+        ),
       });
 
       const data = (await response.json()) as { error?: string };
 
       if (!response.ok) {
-        throw new Error(data.error || "Unable to add address.");
+        throw new Error(
+          data.error ||
+            (editingAddressId
+              ? "Unable to update address."
+              : "Unable to add address."),
+        );
       }
 
-      setFormSuccess("Address added successfully.");
+      setFormSuccess(
+        editingAddressId
+          ? "Address updated successfully."
+          : "Address added successfully.",
+      );
       setFormData({
         firstName: "",
         lastName: "",
@@ -168,6 +196,7 @@ export default function AddressesPage() {
         phone: "",
       });
       setShowForm(false);
+      setEditingAddressId(null);
       await refreshAddresses();
     } catch (err) {
       setFormError(
@@ -176,6 +205,24 @@ export default function AddressesPage() {
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleEditAddress = (address: Address & { displayName?: string }) => {
+    setFormError(null);
+    setFormSuccess(null);
+    setEditingAddressId(address.id);
+    setFormData({
+      firstName: address.firstName || "",
+      lastName: address.lastName || "",
+      address1: address.address1 || "",
+      address2: address.address2 || "",
+      city: address.city || "",
+      province: address.province || "",
+      zip: address.zip || "",
+      country: address.country || "",
+      phone: address.phone || "",
+    });
+    setShowForm(true);
   };
 
   const handleSetDefault = async (addressId: string) => {
@@ -208,6 +255,40 @@ export default function AddressesPage() {
       );
     } finally {
       setSettingDefault(null);
+    }
+  };
+
+  const handleDeleteAddress = async (addressId: string) => {
+    try {
+      setDeletingAddressId(addressId);
+      setError(null);
+      const response = await fetch("/api/shopify/customer-addresses", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ addressId }),
+      });
+
+      const data = (await response.json()) as {
+        deletedAddressId?: string;
+        error?: string;
+      };
+
+      if (!response.ok) {
+        throw new Error(data.error || "Unable to delete address.");
+      }
+
+      setAddresses((prev) => prev.filter((item) => item.id !== addressId));
+      if (defaultAddressId === addressId) {
+        setDefaultAddressId(null);
+      }
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Unable to delete address.",
+      );
+    } finally {
+      setDeletingAddressId(null);
     }
   };
 
@@ -395,7 +476,11 @@ export default function AddressesPage() {
                 disabled={saving}
                 className="bg-gray-900 text-white py-3 px-6 hover:bg-gray-800 transition-colors uppercase cursor-pointer text-sm"
               >
-                {saving ? "Saving..." : "Save Address"}
+                {saving
+                  ? "Saving..."
+                  : editingAddressId
+                    ? "Update Address"
+                    : "Save Address"}
               </button>
             </div>
           </form>
@@ -449,7 +534,11 @@ export default function AddressesPage() {
                   )}
                 </div>
                 <div className="flex gap-4 pt-4 mt-4 border-t border-gray-100">
-                  <button className="text-gray-600 hover:text-gray-900 text-sm cursor-pointer">
+                  <button
+                    type="button"
+                    onClick={() => handleEditAddress(address)}
+                    className="text-gray-600 hover:text-gray-900 text-sm cursor-pointer"
+                  >
                     Edit
                   </button>
                   {!address.isDefault && (
@@ -464,8 +553,15 @@ export default function AddressesPage() {
                           ? "Setting..."
                           : "Set as Default"}
                       </button>
-                      <button className="text-red-600 hover:text-red-800 text-sm cursor-pointer">
-                        Delete
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteAddress(address.id)}
+                        disabled={deletingAddressId === address.id}
+                        className="text-red-600 hover:text-red-800 text-sm cursor-pointer disabled:opacity-60"
+                      >
+                        {deletingAddressId === address.id
+                          ? "Deleting..."
+                          : "Delete"}
                       </button>
                     </>
                   )}
