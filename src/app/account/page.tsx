@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { SignOutButton } from "@/app/account/_components/SignOutButton";
 
 export default function AccountPage() {
   return (
@@ -51,9 +52,7 @@ export default function AccountPage() {
         </div>
 
         <div className="mt-12 pt-8 border-t border-gray-200">
-          <button className="text-gray-600 hover:text-gray-900 font-light cursor-pointer">
-            Sign Out
-          </button>
+          <SignOutButton />
         </div>
       </div>
     </div>

@@ -1,14 +1,65 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
+import { authClient } from "@/lib/auth-client";
 
 export default function LoginPage() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+
+    const form = e.currentTarget;
+    const email = (form.elements.namedItem("email") as HTMLInputElement).value;
+    const password = (form.elements.namedItem("password") as HTMLInputElement)
+      .value;
+
+    try {
+      const shopifyAuth = await authClient.shopifySignIn({
+        email,
+        password,
+      });
+
+      const shopifyError = (shopifyAuth as { error?: { message?: string } })
+        ?.error?.message;
+      if (shopifyError) {
+        setError(shopifyError || "Invalid email or password.");
+        return;
+      }
+
+      const shopifyData = (shopifyAuth as { data?: { token?: string } })?.data;
+      if (!shopifyData?.token) {
+        setError("Invalid email or password.");
+        return;
+      }
+
+      if (shopifyData.token) {
+        const expires = new Date();
+        expires.setDate(expires.getDate() + 365);
+        document.cookie = `shopifyCustomerAccessToken=${encodeURIComponent(
+          shopifyData.token,
+        )}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
+      }
+
+      window.location.href = "/";
+    } catch {
+      setError("Unable to sign in. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div className="border-box px-5 py-8 lg:px-10 min-h-[60vh] flex items-center justify-center">
       <div className="w-full max-w-md">
         <h1 className="text-2xl font-semibold text-gray-900 text-center mb-8 ">
           Login
         </h1>
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4" onSubmit={onSubmit}>
           <div className="flex flex-col gap-2">
             <label htmlFor="email" className="text-gray-900">
               Email
@@ -35,11 +86,19 @@ export default function LoginPage() {
               required
             />
           </div>
+
+          {error && (
+            <p className="text-sm text-red-600" role="alert">
+              {error}
+            </p>
+          )}
+
           <button
             type="submit"
-            className="mt-4 bg-gray-900 text-white py-3 px-4 hover:bg-gray-800 transition-colors cursor-pointer uppercase"
+            disabled={loading}
+            className="mt-4 bg-gray-900 text-white py-3 px-4 hover:bg-gray-800 transition-colors cursor-pointer uppercase disabled:opacity-60"
           >
-            Sign In
+            {loading ? "Signing In..." : "Sign In"}
           </button>
         </form>
         <div className="mt-6 flex flex-col items-center gap-4">

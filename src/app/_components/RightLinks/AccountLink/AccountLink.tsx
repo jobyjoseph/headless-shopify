@@ -25,7 +25,9 @@ export const AccountLink = () => {
           <span className="md:hidden">
             <HiOutlineUser className="text-2xl" />
           </span>
-          <span className="hidden md:inline ml-1">Hi {user?.firstName}!</span>
+          <span className="hidden md:inline ml-1">
+            Hi {user?.name ?? user?.email}!
+          </span>
         </Link>
       ) : (
         <Link href="/account/login" className="p-1 inline-flex">

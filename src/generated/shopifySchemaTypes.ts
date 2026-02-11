@@ -285,7 +285,12 @@ export type AutomaticDiscountApplication = DiscountApplication & {
   value: PricingValue;
 };
 
-/** Represents a cart line common fields. */
+/**
+ * Defines the shared fields for items in a shopping cart. Implemented by [`CartLine`](https://shopify.dev/docs/api/storefront/current/objects/CartLine) for individual merchandise and [`ComponentizableCartLine`](https://shopify.dev/docs/api/storefront/current/objects/ComponentizableCartLine) for grouped merchandise like bundles.
+ *
+ * Each implementation includes the merchandise being purchased, quantity, cost breakdown, applied discounts, custom attributes, and any associated [`SellingPlan`](https://shopify.dev/docs/api/storefront/current/objects/SellingPlan).
+ *
+ */
 export type BaseCartLine = {
   /** An attribute associated with the cart line. */
   attribute?: Maybe<Attribute>;
@@ -311,7 +316,12 @@ export type BaseCartLine = {
 };
 
 
-/** Represents a cart line common fields. */
+/**
+ * Defines the shared fields for items in a shopping cart. Implemented by [`CartLine`](https://shopify.dev/docs/api/storefront/current/objects/CartLine) for individual merchandise and [`ComponentizableCartLine`](https://shopify.dev/docs/api/storefront/current/objects/ComponentizableCartLine) for grouped merchandise like bundles.
+ *
+ * Each implementation includes the merchandise being purchased, quantity, cost breakdown, applied discounts, custom attributes, and any associated [`SellingPlan`](https://shopify.dev/docs/api/storefront/current/objects/SellingPlan).
+ *
+ */
 export type BaseCartLineAttributeArgs = {
   key: Scalars['String']['input'];
 };
@@ -643,7 +653,10 @@ export type CartMetafieldsArgs = {
 /** A delivery address of the buyer that is interacting with the cart. */
 export type CartAddress = CartDeliveryAddress;
 
-/** The input fields to provide exactly one of a variety of delivery address types. */
+/**
+ * Specifies a delivery address for a cart. Provide either a [`deliveryAddress`](https://shopify.dev/docs/api/storefront/current/input-objects/CartAddressInput#fields-deliveryAddress) with full address details, or a [`copyFromCustomerAddressId`](https://shopify.dev/docs/api/storefront/current/input-objects/CartAddressInput#fields-copyFromCustomerAddressId) to copy from an existing customer address. Used by [`CartSelectableAddressInput`](https://shopify.dev/docs/api/storefront/current/input-objects/CartSelectableAddressInput) and [`CartSelectableAddressUpdateInput`](https://shopify.dev/docs/api/storefront/current/input-objects/CartSelectableAddressUpdateInput).
+ *
+ */
 export type CartAddressInput = {
   /** Copies details from the customer address to an address on this cart. */
   copyFromCustomerAddressId?: InputMaybe<Scalars['ID']['input']>;
@@ -686,7 +699,12 @@ export type CartBillingAddressUpdatePayload = {
   warnings: Array<CartWarning>;
 };
 
-/** Represents information about the buyer that is interacting with the cart. */
+/**
+ * Contact information about the buyer interacting with a [cart](https://shopify.dev/docs/api/storefront/current/objects/Cart). The buyer's country determines [international pricing](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/markets/international-pricing) and should match their shipping address.
+ *
+ * For B2B scenarios, the [`purchasingCompany`](https://shopify.dev/docs/api/storefront/current/objects/CartBuyerIdentity#field-CartBuyerIdentity.fields.purchasingCompany) field identifies the company and location on whose behalf a business customer purchases. The [`preferences`](https://shopify.dev/docs/api/storefront/current/objects/CartBuyerIdentity#field-CartBuyerIdentity.fields.preferences) field stores delivery and wallet settings that prefill checkout fields to streamline the buying process.
+ *
+ */
 export type CartBuyerIdentity = {
   __typename?: 'CartBuyerIdentity';
   /** The country where the buyer is located. */
@@ -722,10 +740,12 @@ export type CartBuyerIdentity = {
 };
 
 /**
- * Specifies the input fields to update the buyer information associated with a cart.
- * Buyer identity is used to determine
- * [international pricing](https://shopify.dev/custom-storefronts/internationalization/international-pricing)
- * and should match the customer's shipping address.
+ * The input fields for identifying the buyer associated with a cart. Buyer identity determines [international pricing](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/markets/international-pricing) and should match the customer's shipping address.
+ *
+ * Used by [`cartCreate`](https://shopify.dev/docs/api/storefront/current/mutations/cartCreate) and [`cartBuyerIdentityUpdate`](https://shopify.dev/docs/api/storefront/current/mutations/cartBuyerIdentityUpdate) to set contact information, location, and checkout preferences.
+ *
+ * > Note:
+ * > Preferences prefill fields at checkout but don't sync back to the cart if overwritten.
  *
  */
 export type CartBuyerIdentityInput = {
@@ -1551,7 +1571,12 @@ export type CartInputMetafieldInput = {
   value: Scalars['String']['input'];
 };
 
-/** Represents information about the merchandise in the cart. */
+/**
+ * An item in a customer's [`Cart`](https://shopify.dev/docs/api/storefront/current/objects/Cart) representing a product variant they intend to purchase. Each cart line tracks the merchandise, quantity, cost breakdown, and any applied discounts.
+ *
+ * Cart lines can include custom attributes for additional information like gift wrapping requests, and can be associated with a [`SellingPlanAllocation`](https://shopify.dev/docs/api/storefront/current/objects/SellingPlanAllocation) for purchase options like subscriptions, pre-orders, or try-before-you-buy. The [`instructions`](https://shopify.dev/docs/api/storefront/current/objects/CartLine#field-CartLine.fields.instructions) field indicates whether the line can be removed or have its quantity updated.
+ *
+ */
 export type CartLine = BaseCartLine & Node & {
   __typename?: 'CartLine';
   /** An attribute associated with the cart line. */
@@ -1582,12 +1607,22 @@ export type CartLine = BaseCartLine & Node & {
 };
 
 
-/** Represents information about the merchandise in the cart. */
+/**
+ * An item in a customer's [`Cart`](https://shopify.dev/docs/api/storefront/current/objects/Cart) representing a product variant they intend to purchase. Each cart line tracks the merchandise, quantity, cost breakdown, and any applied discounts.
+ *
+ * Cart lines can include custom attributes for additional information like gift wrapping requests, and can be associated with a [`SellingPlanAllocation`](https://shopify.dev/docs/api/storefront/current/objects/SellingPlanAllocation) for purchase options like subscriptions, pre-orders, or try-before-you-buy. The [`instructions`](https://shopify.dev/docs/api/storefront/current/objects/CartLine#field-CartLine.fields.instructions) field indicates whether the line can be removed or have its quantity updated.
+ *
+ */
 export type CartLineAttributeArgs = {
   key: Scalars['String']['input'];
 };
 
-/** The cost of the merchandise line that the buyer will pay at checkout. */
+/**
+ * Cost breakdown for a single line item in a [cart](https://shopify.dev/docs/api/storefront/current/objects/Cart). Includes the per-unit price, the subtotal before line-level discounts, and the final total amount the buyer pays.
+ *
+ * The [`compareAtAmountPerQuantity`](https://shopify.dev/docs/api/storefront/current/objects/CartLineCost#field-CartLineCost.fields.compareAtAmountPerQuantity) field shows the original price when the item is on sale, enabling the display of savings to customers.
+ *
+ */
 export type CartLineCost = {
   __typename?: 'CartLineCost';
   /** The amount of the merchandise line. */
@@ -1616,7 +1651,12 @@ export type CartLineEstimatedCost = {
   totalAmount: MoneyV2;
 };
 
-/** The input fields to create a merchandise line on a cart. */
+/**
+ * The input fields for adding a merchandise line to a cart. Each line represents a [`ProductVariant`](https://shopify.dev/docs/api/storefront/current/objects/ProductVariant) the buyer intends to purchase, along with the quantity and optional [`SellingPlan`](https://shopify.dev/docs/api/storefront/current/objects/SellingPlan) for subscriptions.
+ *
+ * Used by the [`cartCreate`](https://shopify.dev/docs/api/storefront/current/mutations/cartCreate) mutation when creating a cart with initial items, and the [`cartLinesAdd`](https://shopify.dev/docs/api/storefront/current/mutations/cartLinesAdd) mutation when adding items to an existing cart.
+ *
+ */
 export type CartLineInput = {
   /**
    * An array of key-value pairs that contains additional information about the merchandise line.
@@ -1658,7 +1698,12 @@ export type CartLineParentRelationship = {
   parent: CartLine;
 };
 
-/** The input fields to update a line item on a cart. */
+/**
+ * The input fields for updating a merchandise line in a cart. Used by the [`cartLinesUpdate`](https://shopify.dev/docs/api/storefront/current/mutations/cartLinesUpdate) mutation.
+ *
+ * Specify the line item's [`id`](https://shopify.dev/docs/api/storefront/current/input-objects/CartLineUpdateInput#fields-id) along with any fields to modify. You can change the quantity, swap the merchandise, update custom attributes, or associate a different selling plan.
+ *
+ */
 export type CartLineUpdateInput = {
   /**
    * An array of key-value pairs that contains additional information about the merchandise line.
@@ -1889,7 +1934,12 @@ export type CartSelectableAddress = {
   selected: Scalars['Boolean']['output'];
 };
 
-/** The input fields for a selectable delivery address in a cart. */
+/**
+ * The input fields for a selectable delivery address to present to the buyer. Used by [`CartDeliveryInput`](https://shopify.dev/docs/api/storefront/current/input-objects/CartDeliveryInput) when creating a cart with the [`cartCreate`](https://shopify.dev/docs/api/storefront/current/mutations/cartCreate) mutation.
+ *
+ * You can pre-select an address for the buyer, mark it as one-time use so it isn't saved after checkout, and specify how strictly the address should be validated.
+ *
+ */
 export type CartSelectableAddressInput = {
   /** Exactly one kind of delivery address. */
   address: CartAddressInput;
@@ -4073,7 +4123,14 @@ export type FulfillmentTrackingInfo = {
   url?: Maybe<Scalars['URL']['output']>;
 };
 
-/** The generic file resource lets you manage files in a merchant’s store. Generic files include any file that doesn’t fit into a designated type such as image or video. Example: PDF, JSON. */
+/**
+ * Any file that doesn't fit into a designated type like image or video. For example, a PDF or JSON document. Use this object to manage files in a merchant's store.
+ *
+ * Generic files are commonly referenced through [file reference metafields](https://shopify.dev/docs/apps/build/metafields/list-of-data-types) and returned as part of the [`MetafieldReference`](https://shopify.dev/docs/api/storefront/current/unions/MetafieldReference) union.
+ *
+ * Includes the file's URL, MIME type, size in bytes, and an optional preview image.
+ *
+ */
 export type GenericFile = Node & {
   __typename?: 'GenericFile';
   /** A word or phrase to indicate the contents of a file. */
@@ -4127,7 +4184,12 @@ export type HasMetafieldsIdentifier = {
   namespace?: InputMaybe<Scalars['String']['input']>;
 };
 
-/** Represents an image resource. */
+/**
+ * An image resource with URL, dimensions, and transformation options. Used for product images, collection images, media previews, and other visual content throughout the storefront.
+ *
+ * The [`url`](https://shopify.dev/docs/api/storefront/current/objects/Image#field-Image.fields.url) field accepts an [`ImageTransformInput`](https://shopify.dev/docs/api/storefront/current/input-objects/ImageTransformInput) argument for resizing, cropping, scaling for retina displays, and converting between image formats. Use the [`thumbhash`](https://shopify.dev/docs/api/storefront/current/objects/Image#field-Image.fields.thumbhash) field to display lightweight placeholders while images load.
+ *
+ */
 export type Image = {
   __typename?: 'Image';
   /** A word or phrase to share the nature or contents of an image. */
@@ -4183,7 +4245,12 @@ export type Image = {
 };
 
 
-/** Represents an image resource. */
+/**
+ * An image resource with URL, dimensions, and transformation options. Used for product images, collection images, media previews, and other visual content throughout the storefront.
+ *
+ * The [`url`](https://shopify.dev/docs/api/storefront/current/objects/Image#field-Image.fields.url) field accepts an [`ImageTransformInput`](https://shopify.dev/docs/api/storefront/current/input-objects/ImageTransformInput) argument for resizing, cropping, scaling for retina displays, and converting between image formats. Use the [`thumbhash`](https://shopify.dev/docs/api/storefront/current/objects/Image#field-Image.fields.thumbhash) field to display lightweight placeholders while images load.
+ *
+ */
 export type ImageTransformedSrcArgs = {
   crop?: InputMaybe<CropRegion>;
   maxHeight?: InputMaybe<Scalars['Int']['input']>;
@@ -4193,7 +4260,12 @@ export type ImageTransformedSrcArgs = {
 };
 
 
-/** Represents an image resource. */
+/**
+ * An image resource with URL, dimensions, and transformation options. Used for product images, collection images, media previews, and other visual content throughout the storefront.
+ *
+ * The [`url`](https://shopify.dev/docs/api/storefront/current/objects/Image#field-Image.fields.url) field accepts an [`ImageTransformInput`](https://shopify.dev/docs/api/storefront/current/input-objects/ImageTransformInput) argument for resizing, cropping, scaling for retina displays, and converting between image formats. Use the [`thumbhash`](https://shopify.dev/docs/api/storefront/current/objects/Image#field-Image.fields.thumbhash) field to display lightweight placeholders while images load.
+ *
+ */
 export type ImageUrlArgs = {
   transform?: InputMaybe<ImageTransformInput>;
 };
@@ -4712,7 +4784,12 @@ export enum LocationSortKeys {
   Name = 'NAME'
 }
 
-/** Represents a mailing address for customers and shipping. */
+/**
+ * A physical mailing address associated with a [`Customer`](https://shopify.dev/docs/api/storefront/current/objects/Customer) or [`Order`](https://shopify.dev/docs/api/storefront/current/objects/Order). Stores standard address components including street address, city, province, country, and postal code, along with customer name and company information.
+ *
+ * The address includes geographic coordinates and provides pre-formatted output through the [`formatted`](https://shopify.dev/docs/api/storefront/current/objects/MailingAddress#field-MailingAddress.fields.formatted) field, which can optionally include or exclude name and company details.
+ *
+ */
 export type MailingAddress = Node & {
   __typename?: 'MailingAddress';
   /** The first line of the address. Typically the street address or PO Box number. */
@@ -4780,7 +4857,12 @@ export type MailingAddress = Node & {
 };
 
 
-/** Represents a mailing address for customers and shipping. */
+/**
+ * A physical mailing address associated with a [`Customer`](https://shopify.dev/docs/api/storefront/current/objects/Customer) or [`Order`](https://shopify.dev/docs/api/storefront/current/objects/Order). Stores standard address components including street address, city, province, country, and postal code, along with customer name and company information.
+ *
+ * The address includes geographic coordinates and provides pre-formatted output through the [`formatted`](https://shopify.dev/docs/api/storefront/current/objects/MailingAddress#field-MailingAddress.fields.formatted) field, which can optionally include or exclude name and company details.
+ *
+ */
 export type MailingAddressFormattedArgs = {
   withCompany?: InputMaybe<Scalars['Boolean']['input']>;
   withName?: InputMaybe<Scalars['Boolean']['input']>;
@@ -4812,7 +4894,12 @@ export type MailingAddressEdge = {
   node: MailingAddress;
 };
 
-/** The input fields to create or update a mailing address. */
+/**
+ * The input fields for creating or updating a [`MailingAddress`](https://shopify.dev/docs/api/storefront/current/objects/MailingAddress). Accepts standard address components including street address, city, province, country, and postal code, along with customer name and contact information.
+ *
+ * Used by the [`customerAddressCreate`](https://shopify.dev/docs/api/storefront/current/mutations/customerAddressCreate) and [`customerAddressUpdate`](https://shopify.dev/docs/api/storefront/current/mutations/customerAddressUpdate) mutations, and as part of [`DeliveryAddressInput`](https://shopify.dev/docs/api/storefront/current/input-objects/DeliveryAddressInput) for cart delivery preferences.
+ *
+ */
 export type MailingAddressInput = {
   /**
    * The first line of the address. Typically the street address or PO Box number.
@@ -4902,7 +4989,12 @@ export type MarketMetafieldsArgs = {
   identifiers: Array<HasMetafieldsIdentifier>;
 };
 
-/** Represents a media interface. */
+/**
+ * A common set of fields for media content associated with [products](https://shopify.dev/docs/api/storefront/current/objects/Product). Implementations include [`MediaImage`](https://shopify.dev/docs/api/storefront/current/objects/MediaImage) for Shopify-hosted images, [`Video`](https://shopify.dev/docs/api/storefront/current/objects/Video) for Shopify-hosted videos, [`ExternalVideo`](https://shopify.dev/docs/api/storefront/current/objects/ExternalVideo) for videos hosted on platforms like YouTube or Vimeo, and [`Model3d`](https://shopify.dev/docs/api/storefront/current/objects/Model3d) for 3D models.
+ *
+ * Each implementation shares fields for alt text, content type, and preview images, while adding type-specific fields like embed URLs for external videos or source files for 3D models.
+ *
+ */
 export type Media = {
   /** A word or phrase to share the nature or contents of a media. */
   alt?: Maybe<Scalars['String']['output']>;
@@ -4962,7 +5054,12 @@ export enum MediaHost {
   Youtube = 'YOUTUBE'
 }
 
-/** Represents a Shopify hosted image. */
+/**
+ * An image hosted on Shopify's content delivery network (CDN). Used for product images, brand logos, and other visual content across the storefront.
+ *
+ * The [`image`](https://shopify.dev/docs/api/storefront/current/objects/MediaImage#field-MediaImage.fields.image) field provides the actual image data with transformation options. Implements the [`Media`](https://shopify.dev/docs/api/storefront/current/interfaces/Media) interface alongside other media types like [`Video`](https://shopify.dev/docs/api/storefront/current/objects/Video) and [`Model3d`](https://shopify.dev/docs/api/storefront/current/objects/Model3d).
+ *
+ */
 export type MediaImage = Media & Node & {
   __typename?: 'MediaImage';
   /** A word or phrase to share the nature or contents of a media. */
@@ -5403,21 +5500,28 @@ export type MoneyV2 = {
 /** The schema’s entry-point for mutations. This acts as the public, top-level API from which all mutation queries must start. */
 export type Mutation = {
   __typename?: 'Mutation';
-  /** Updates the attributes on a cart. */
+  /**
+   * Updates the attributes on a [`Cart`](https://shopify.dev/docs/api/storefront/current/objects/Cart). Attributes are custom key-value pairs that store additional information, such as gift messages, special instructions, or order notes.
+   *
+   */
   cartAttributesUpdate?: Maybe<CartAttributesUpdatePayload>;
   /** Updates the billing address on the cart. */
   cartBillingAddressUpdate?: Maybe<CartBillingAddressUpdatePayload>;
   /**
-   * Updates customer information associated with a cart.
-   * Buyer identity is used to determine
-   * [international pricing](https://shopify.dev/custom-storefronts/internationalization/international-pricing)
-   * and should match the customer's shipping address.
+   * Updates the buyer identity on a [`Cart`](https://shopify.dev/docs/api/storefront/current/objects/Cart), including contact information, location, and checkout preferences. The buyer's country determines [international pricing](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/markets/international-pricing) and should match their shipping address.
+   *
+   * Use this mutation to associate a logged-in customer via access token, set a B2B company location, or configure checkout preferences like delivery method. Preferences prefill checkout fields but don't sync back to the cart if overwritten at checkout.
    *
    */
   cartBuyerIdentityUpdate?: Maybe<CartBuyerIdentityUpdatePayload>;
   /** Creates a clone of the specified cart with all personally identifiable information removed. */
   cartClone?: Maybe<CartClonePayload>;
-  /** Creates a new cart. */
+  /**
+   * Creates a new [`Cart`](https://shopify.dev/docs/api/storefront/current/objects/Cart) for a buyer session. You can optionally initialize the cart with merchandise lines, discount codes, gift card codes, buyer identity for international pricing, and custom attributes.
+   *
+   * The returned cart includes a `checkoutUrl` that directs the buyer to complete their purchase.
+   *
+   */
   cartCreate?: Maybe<CartCreatePayload>;
   /** Adds delivery addresses to the cart. */
   cartDeliveryAddressesAdd?: Maybe<CartDeliveryAddressesAddPayload>;
@@ -5427,13 +5531,29 @@ export type Mutation = {
   cartDeliveryAddressesReplace?: Maybe<CartDeliveryAddressesReplacePayload>;
   /** Updates one or more delivery addresses on a cart. */
   cartDeliveryAddressesUpdate?: Maybe<CartDeliveryAddressesUpdatePayload>;
-  /** Updates the discount codes applied to the cart. */
+  /**
+   * Updates the discount codes applied to a [`Cart`](https://shopify.dev/docs/api/storefront/current/objects/Cart). This mutation replaces all existing discount codes with the provided list, so pass an empty array to remove all codes. Discount codes are case-insensitive.
+   *
+   * After updating, check each [`CartDiscountCode`](https://shopify.dev/docs/api/storefront/current/objects/CartDiscountCode) in the cart's [`discountCodes`](https://shopify.dev/docs/api/storefront/current/objects/Cart#field-Cart.fields.discountCodes) field to see whether the code is applicable to the cart's current contents.
+   *
+   */
   cartDiscountCodesUpdate?: Maybe<CartDiscountCodesUpdatePayload>;
-  /** Adds gift card codes to the cart without replacing existing ones. */
+  /**
+   * Adds gift card codes to a [`Cart`](https://shopify.dev/docs/api/storefront/current/objects/Cart) without replacing any codes already applied. Gift card codes are case-insensitive.
+   *
+   * To replace all gift card codes instead of adding to them, use [`cartGiftCardCodesUpdate`](https://shopify.dev/docs/api/storefront/current/mutations/cartGiftCardCodesUpdate).
+   *
+   */
   cartGiftCardCodesAdd?: Maybe<CartGiftCardCodesAddPayload>;
-  /** Removes the gift card codes applied to the cart. */
+  /**
+   * Removes gift cards from a [`Cart`](https://shopify.dev/docs/api/storefront/current/objects/Cart) using their IDs. You can retrieve the IDs of applied gift cards from the cart's [`appliedGiftCards`](https://shopify.dev/docs/api/storefront/current/objects/Cart#field-Cart.fields.appliedGiftCards) field.
+   *
+   */
   cartGiftCardCodesRemove?: Maybe<CartGiftCardCodesRemovePayload>;
-  /** Updates the gift card codes applied to the cart. */
+  /**
+   * Updates the gift card codes applied to the cart. Unlike [`cartGiftCardCodesAdd`](https://shopify.dev/docs/api/storefront/current/mutations/cartGiftCardCodesAdd), which adds codes without replacing existing ones, this mutation sets the gift card codes for the cart. Gift card codes are case-insensitive.
+   *
+   */
   cartGiftCardCodesUpdate?: Maybe<CartGiftCardCodesUpdatePayload>;
   /** Adds a merchandise line to the cart. */
   cartLinesAdd?: Maybe<CartLinesAddPayload>;
@@ -5461,7 +5581,10 @@ export type Mutation = {
    *
    */
   cartMetafieldsSet?: Maybe<CartMetafieldsSetPayload>;
-  /** Updates the note on the cart. */
+  /**
+   * Updates the note on a [`Cart`](https://shopify.dev/docs/api/storefront/current/objects/Cart). The note is a text field that stores additional information, such as a personalized message from the buyer or special instructions for the order.
+   *
+   */
   cartNoteUpdate?: Maybe<CartNoteUpdatePayload>;
   /** Update the customer's payment method that will be used to checkout. */
   cartPaymentUpdate?: Maybe<CartPaymentUpdatePayload>;
@@ -5469,7 +5592,12 @@ export type Mutation = {
   cartPrepareForCompletion?: Maybe<CartPrepareForCompletionPayload>;
   /** Removes personally identifiable information from the cart. */
   cartRemovePersonalData?: Maybe<CartRemovePersonalDataPayload>;
-  /** Update the selected delivery options for a delivery group. */
+  /**
+   * Updates the selected delivery option for one or more [`CartDeliveryGroup`](https://shopify.dev/docs/api/storefront/current/objects/CartDeliveryGroup) objects in a cart. Each delivery group represents items shipping to a specific address and offers multiple delivery options with different costs and methods.
+   *
+   * Use this mutation when a customer chooses their preferred shipping method during checkout. The [`deliveryOptionHandle`](https://shopify.dev/docs/api/storefront/current/input-objects/CartSelectedDeliveryOptionInput#field-CartSelectedDeliveryOptionInput.fields.deliveryOptionHandle) identifies which [`CartDeliveryOption`](https://shopify.dev/docs/api/storefront/current/objects/CartDeliveryOption) to select for each delivery group.
+   *
+   */
   cartSelectedDeliveryOptionsUpdate?: Maybe<CartSelectedDeliveryOptionsUpdatePayload>;
   /** Submit the cart for checkout completion. */
   cartSubmitForCompletion?: Maybe<CartSubmitForCompletionPayload>;
@@ -6982,7 +7110,10 @@ export type ProductOptionValueSwatch = {
   image?: Maybe<Media>;
 };
 
-/** The price range of the product. */
+/**
+ * The minimum and maximum prices across all variants of a [`Product`](https://shopify.dev/docs/api/storefront/current/objects/Product).
+ *
+ */
 export type ProductPriceRange = {
   __typename?: 'ProductPriceRange';
   /** The highest variant's price. */
@@ -8999,7 +9130,11 @@ export type Swatch = {
 };
 
 /**
- * The taxonomy category for the product.
+ * A category from Shopify's [Standard Product Taxonomy](https://shopify.github.io/product-taxonomy/releases/unstable/?categoryId=sg-4-17-2-17) assigned to a [`Product`](https://shopify.dev/docs/api/storefront/current/objects/Product). Categories provide hierarchical classification through the `ancestors` field.
+ *
+ * The [`ancestors`](https://shopify.dev/docs/api/storefront/current/objects/TaxonomyCategory#field-TaxonomyCategory.fields.ancestors) field returns the parent chain from the immediate parent up to the root. Each ancestor category also includes its own `ancestors`.
+ *
+ * The [`name`](https://shopify.dev/docs/api/storefront/latest/objects/TaxonomyCategory#field-TaxonomyCategory.fields.name) field returns the localized category name based on the storefront's request language with shop locale fallbacks. If a translation isn't available for the resolved locale, the English taxonomy name is returned.
  *
  */
 export type TaxonomyCategory = Node & {
@@ -9207,7 +9342,12 @@ export type VariantOptionFilter = {
   value: Scalars['String']['input'];
 };
 
-/** Represents a Shopify hosted video. */
+/**
+ * A video hosted on Shopify's servers. Implements the [`Media`](https://shopify.dev/docs/api/storefront/current/interfaces/Media) interface and provides multiple video sources through the [`sources`](https://shopify.dev/docs/api/storefront/current/objects/Video#field-Video.fields.sources) field, each with [format](https://shopify.dev/docs/api/storefront/current/objects/Video#field-Video.fields.sources.format), dimensions, and [URL information](https://shopify.dev/docs/api/storefront/current/objects/Video#field-Video.fields.sources.url) for adaptive playback.
+ *
+ * For videos hosted on external platforms like YouTube or Vimeo, use [`ExternalVideo`](https://shopify.dev/docs/api/storefront/current/objects/ExternalVideo) instead.
+ *
+ */
 export type Video = Media & Node & {
   __typename?: 'Video';
   /** A word or phrase to share the nature or contents of a media. */
@@ -9325,6 +9465,13 @@ export type CustomerAccessTokenCreateMutationVariables = Exact<{
 
 export type CustomerAccessTokenCreateMutation = { __typename?: 'Mutation', customerAccessTokenCreate?: { __typename?: 'CustomerAccessTokenCreatePayload', customerAccessToken?: { __typename?: 'CustomerAccessToken', accessToken: string, expiresAt: any } | null, customerUserErrors: Array<{ __typename?: 'CustomerUserError', message: string, field?: Array<string> | null }> } | null };
 
+export type CustomerCreateMutationVariables = Exact<{
+  input: CustomerCreateInput;
+}>;
+
+
+export type CustomerCreateMutation = { __typename?: 'Mutation', customerCreate?: { __typename?: 'CustomerCreatePayload', customer?: { __typename?: 'Customer', id: string, email?: string | null, firstName?: string | null, lastName?: string | null } | null, customerUserErrors: Array<{ __typename?: 'CustomerUserError', message: string, field?: Array<string> | null }> } | null };
+
 export type CustomerQueryVariables = Exact<{
   customerAccessToken: Scalars['String']['input'];
 }>;
@@ -9372,6 +9519,7 @@ export const CartLinesUpdateDocument = {"kind":"Document","definitions":[{"kind"
 export const GetCartDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCart"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cartId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cart"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cartId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"totalQuantity"}},{"kind":"Field","name":{"kind":"Name","value":"checkoutUrl"}},{"kind":"Field","name":{"kind":"Name","value":"cost"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"subtotalAmount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"currencyCode"}}]}},{"kind":"Field","name":{"kind":"Name","value":"totalAmount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"currencyCode"}}]}},{"kind":"Field","name":{"kind":"Name","value":"totalTaxAmount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"currencyCode"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"lines"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"250"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"quantity"}},{"kind":"Field","name":{"kind":"Name","value":"merchandise"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ProductVariant"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"price"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"currencyCode"}}]}},{"kind":"Field","name":{"kind":"Name","value":"product"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"handle"}}]}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"altText"}}]}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetCartQuery, GetCartQueryVariables>;
 export const CollectionByHandleDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CollectionByHandle"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"handle"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"collection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"handle"},"value":{"kind":"Variable","name":{"kind":"Name","value":"handle"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"products"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cursor"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"handle"}},{"kind":"Field","name":{"kind":"Name","value":"featuredImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"altText"}}]}},{"kind":"Field","name":{"kind":"Name","value":"priceRange"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"minVariantPrice"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"currencyCode"}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}}]}}]}}]}}]}}]} as unknown as DocumentNode<CollectionByHandleQuery, CollectionByHandleQueryVariables>;
 export const CustomerAccessTokenCreateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"customerAccessTokenCreate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CustomerAccessTokenCreateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"customerAccessTokenCreate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"customerAccessToken"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}},{"kind":"Field","name":{"kind":"Name","value":"expiresAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"customerUserErrors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"field"}}]}}]}}]}}]} as unknown as DocumentNode<CustomerAccessTokenCreateMutation, CustomerAccessTokenCreateMutationVariables>;
+export const CustomerCreateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"customerCreate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CustomerCreateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"customerCreate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"customer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"customerUserErrors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"field"}}]}}]}}]}}]} as unknown as DocumentNode<CustomerCreateMutation, CustomerCreateMutationVariables>;
 export const CustomerDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Customer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"customerAccessToken"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"customer"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"customerAccessToken"},"value":{"kind":"Variable","name":{"kind":"Name","value":"customerAccessToken"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}}]}}]} as unknown as DocumentNode<CustomerQuery, CustomerQueryVariables>;
 export const MenuDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Menu"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"handle"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"menu"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"handle"},"value":{"kind":"Variable","name":{"kind":"Name","value":"handle"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}}]} as unknown as DocumentNode<MenuQuery, MenuQueryVariables>;
 export const ProductDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Product"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"handle"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"product"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"handle"},"value":{"kind":"Variable","name":{"kind":"Name","value":"handle"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"handle"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"tags"}},{"kind":"Field","name":{"kind":"Name","value":"priceRange"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"minVariantPrice"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"currencyCode"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"images"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"10"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"altText"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"options"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"optionValues"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"swatch"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"color"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"previewImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"variants"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"100"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"availableForSale"}},{"kind":"Field","name":{"kind":"Name","value":"selectedOptions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<ProductQuery, ProductQueryVariables>;
