@@ -1,22 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { HiOutlineUser } from "react-icons/hi";
-import { getCurrentUser } from "@/lib/shopify/queries/customers/getCurrentUser";
+import { useSession } from "@/providers/session-provider";
 import Link from "next/link";
 
 export const AccountLink = () => {
-  const [user, setUser] = useState(null);
-  const [showUser, setShowUser] = useState(false);
+  const { user, loading } = useSession();
 
-  useEffect(() => {
-    (async () => {
-      const user = await getCurrentUser();
-      setUser(user);
-      setShowUser(true);
-    })();
-  }, []);
-
-  if (!showUser) return null;
+  if (loading) return null;
 
   return (
     <>

@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 import { Josefin_Sans } from "next/font/google";
 import ThemeProvider from "@/providers/theme-provider";
 import { CartProvider } from "@/providers/cart-provider";
+import { SessionProvider } from "@/providers/session-provider";
 import "./global.scss";
 import { Header } from "./_components/Header/Header";
 import { Footer } from "./_components/Footer/Footer";
@@ -30,11 +31,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${josefinSans.className} min-h-screen flex flex-col`}>
         <CartProvider>
-          <Header />
-          <div className="mx-auto w-full max-w-[1590px] flex-1">
-            <ThemeProvider>{children}</ThemeProvider>
-          </div>
-          <Footer />
+          <SessionProvider>
+            <Header />
+            <div className="mx-auto w-full max-w-[1590px] flex-1">
+              <ThemeProvider>{children}</ThemeProvider>
+            </div>
+            <Footer />
+          </SessionProvider>
         </CartProvider>
       </body>
     </html>
