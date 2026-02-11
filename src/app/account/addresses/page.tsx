@@ -38,6 +38,7 @@ export default function AddressesPage() {
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [formSuccess, setFormSuccess] = useState<string | null>(null);
+  const [settingDefault, setSettingDefault] = useState<string | null>(null);
   const [formData, setFormData] = useState<NewAddressForm>({
     firstName: "",
     lastName: "",
@@ -174,6 +175,39 @@ export default function AddressesPage() {
       );
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleSetDefault = async (addressId: string) => {
+    try {
+      setSettingDefault(addressId);
+      setError(null);
+      const response = await fetch("/api/shopify/customer-addresses", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ addressId }),
+      });
+
+      const data = (await response.json()) as {
+        addresses?: Address[];
+        defaultAddressId?: string | null;
+        error?: string;
+      };
+
+      if (!response.ok) {
+        throw new Error(data.error || "Unable to set default address.");
+      }
+
+      setAddresses(data.addresses ?? []);
+      setDefaultAddressId(data.defaultAddressId ?? null);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Unable to set default address.",
+      );
+    } finally {
+      setSettingDefault(null);
     }
   };
 
@@ -420,8 +454,15 @@ export default function AddressesPage() {
                   </button>
                   {!address.isDefault && (
                     <>
-                      <button className="text-gray-600 hover:text-gray-900 text-sm cursor-pointer">
-                        Set as Default
+                      <button
+                        type="button"
+                        onClick={() => handleSetDefault(address.id)}
+                        disabled={settingDefault === address.id}
+                        className="text-gray-600 hover:text-gray-900 text-sm cursor-pointer disabled:opacity-60"
+                      >
+                        {settingDefault === address.id
+                          ? "Setting..."
+                          : "Set as Default"}
                       </button>
                       <button className="text-red-600 hover:text-red-800 text-sm cursor-pointer">
                         Delete

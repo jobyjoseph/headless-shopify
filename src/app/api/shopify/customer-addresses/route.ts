@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { customerAddresses } from "@/integrations/shopify/customer-addresses";
 import { customerAddressCreate } from "@/integrations/shopify/customer-address-create";
+import { customerDefaultAddressUpdate } from "@/integrations/shopify/customer-default-address-update";
 import type { MailingAddressInput } from "@/generated/shopifySchemaTypes";
 
 export async function GET(request: Request) {
@@ -70,6 +71,49 @@ export async function POST(request: Request) {
     console.error("Error creating customer address:", error);
     return NextResponse.json(
       { error: "Unable to add address." },
+      { status: 500 },
+    );
+  }
+}
+
+export async function PATCH(request: Request) {
+  try {
+    const token = (await cookies()).get("shopifyCustomerAccessToken")?.value;
+
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = (await request.json()) as { addressId?: string };
+    const addressId = body.addressId;
+
+    if (!addressId) {
+      return NextResponse.json(
+        { error: "Missing addressId." },
+        { status: 400 },
+      );
+    }
+
+    const result = await customerDefaultAddressUpdate(token, addressId);
+    const payload = result?.customerDefaultAddressUpdate;
+    const userErrors = payload?.customerUserErrors ?? [];
+
+    if (userErrors.length > 0 || !payload?.customer) {
+      return NextResponse.json(
+        { error: userErrors[0]?.message || "Unable to set default address." },
+        { status: 400 },
+      );
+    }
+
+    const edges = payload.customer.addresses?.edges ?? [];
+    const addresses = edges.map((edge) => edge.node);
+    const defaultAddressId = payload.customer.defaultAddress?.id ?? null;
+
+    return NextResponse.json({ addresses, defaultAddressId });
+  } catch (error) {
+    console.error("Error setting default address:", error);
+    return NextResponse.json(
+      { error: "Unable to set default address." },
       { status: 500 },
     );
   }
