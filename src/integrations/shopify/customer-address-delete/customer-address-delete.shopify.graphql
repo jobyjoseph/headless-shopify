@@ -1,5 +1,8 @@
 mutation CustomerAddressDelete($customerAccessToken: String!, $addressId: ID!) {
-  customerAddressDelete(customerAccessToken: $customerAccessToken, id: $addressId) {
+  customerAddressDelete(
+    customerAccessToken: $customerAccessToken
+    id: $addressId
+  ) {
     deletedCustomerAddressId
     customerUserErrors {
       field

@@ -195,7 +195,9 @@ export async function DELETE(request: Request) {
       );
     }
 
-    return NextResponse.json({ deletedAddressId: payload.deletedCustomerAddressId });
+    return NextResponse.json({
+      deletedAddressId: payload.deletedCustomerAddressId,
+    });
   } catch (error) {
     console.error("Error deleting customer address:", error);
     return NextResponse.json(

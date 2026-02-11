@@ -40,7 +40,9 @@ export default function AddressesPage() {
   const [formSuccess, setFormSuccess] = useState<string | null>(null);
   const [settingDefault, setSettingDefault] = useState<string | null>(null);
   const [editingAddressId, setEditingAddressId] = useState<string | null>(null);
-  const [deletingAddressId, setDeletingAddressId] = useState<string | null>(null);
+  const [deletingAddressId, setDeletingAddressId] = useState<string | null>(
+    null,
+  );
   const [formData, setFormData] = useState<NewAddressForm>({
     firstName: "",
     lastName: "",
