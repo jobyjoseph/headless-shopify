@@ -21,3 +21,5 @@ View the site: https://headless-shopify-site.vercel.app
 Have questions? ✉️ to reachjoby@gmail.com
 
 [Changelog](/Changelog.md)
+
+[NOOP]
