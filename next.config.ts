@@ -16,11 +16,11 @@ const nextConfig: NextConfig = {
     rules: {
       "*.graphql": {
         loaders: ["graphql-tag/loader"],
-        as: "text",
+        as: "*.js",
       },
       "*.gql": {
         loaders: ["graphql-tag/loader"],
-        as: "text",
+        as: "*.js",
       },
     },
   },
