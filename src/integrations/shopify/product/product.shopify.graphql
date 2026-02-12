@@ -1,0 +1,52 @@
+query Product($handle: String!) {
+  product(handle: $handle) {
+    id
+    title
+    handle
+    description
+    tags
+    priceRange {
+      minVariantPrice {
+        amount
+        currencyCode
+      }
+    }
+    images(first: 10) {
+      edges {
+        node {
+          url
+          altText
+        }
+      }
+    }
+    options {
+      id
+      name
+      optionValues {
+        id
+        name
+        swatch {
+          color
+          image {
+            previewImage {
+              url
+            }
+          }
+        }
+      }
+    }
+    variants(first: 100) {
+      edges {
+        node {
+          id
+          title
+          availableForSale
+          selectedOptions {
+            name
+            value
+          }
+        }
+      }
+    }
+  }
+}

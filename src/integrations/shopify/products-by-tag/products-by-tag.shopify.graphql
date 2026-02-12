@@ -1,0 +1,27 @@
+query ProductsByTag($query: String!, $first: Int!) {
+  products(first: $first, query: $query) {
+    edges {
+      node {
+        id
+        title
+        handle
+        options {
+          id
+          name
+          optionValues {
+            id
+            name
+            swatch {
+              color
+              image {
+                previewImage {
+                  url
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+query Menu($handle: String!) {
+  menu(handle: $handle) {
+    items {
+      id
+      title
+      url
+    }
+  }
+}
