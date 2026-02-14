@@ -1,25 +1,87 @@
-# Headless Shopify Using Nextjs
+# Headless Shopify Using Next.js
 
-View the site: https://headless-shopify-site.vercel.app
+Open‑source Next.js Shopify storefront starter for building headless ecommerce experiences fast.
 
-## Key features
+Live demo: https://headless-shopify-site.vercel.app
 
-- Headless site using Next.js v15
-- Site layout with Shopify `menu` query
-- All collections page using Shopify `products` query
-- PDP page using `product` by handle query
-- Cart page using `cart` storefront query
-- Create cart functionality using `cartCreate` mutation
-- Add to Cart functionality using `cartLinesAdd` mutation
-- Loads `.graphql` files using `graphql-tag`
-- Authentication handled using Auth.js
-- Modal login/signup form + Dedicated login/signup page
-- Validation using `zod`
-- Reusable components for form controls
-- Dynamic classnames using `clsx` and `tailwind-merge`
+## Features
 
-Have questions? ✉️ to reachjoby@gmail.com
+- Next.js v16.1.6 App Router
+- Shopify Storefront API integration
+- Home, PLP, PDP, Search, Signup, Login, Cart, Account pages
+- Cart creation and line‑item updates
+- GraphQL queries and mutations via `.graphql` files
+- Better-Auth authentication
+- Zod validation
 
-[Changelog](/Changelog.md)
+## Tech stack
 
-[NOOP]
+- Next.js v16
+- React 19
+- TypeScript
+- Tailwind CSS
+- Shopify Storefront API
+- better-auth
+
+## Requirements
+
+- Node.js 20+
+- pnpm 9+
+
+## Getting started
+
+1. Install dependencies
+   - `pnpm install`
+2. Configure environment variables
+   - Copy `.env.example` → `.env` (create if missing)
+3. Run the dev server
+   - `pnpm dev`
+
+Open http://localhost:3000
+
+## Environment variables
+
+These are required to run the app:
+
+- `NEXT_PUBLIC_SHOPIFY_STOREFRONT_GRAPHQL_ENDPOINT`
+- `NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN`
+
+## Scripts
+
+- `pnpm dev` – start dev server
+- `pnpm build` – production build
+- `pnpm start` – start production server
+- `pnpm lint` – run linting
+
+## Deployment
+
+This project works well on Vercel. Set the environment variables above in your Vercel project settings, then deploy.
+
+## Project structure
+
+- `src/app` – routes, pages, and layouts
+- `src/integrations/shopify` – Storefront API queries and mutations
+- `src/components` – shared UI components
+- `src/providers` – app‑wide providers
+- `src/utils` – utilities
+
+## Contributing
+
+Contributions are welcome. Please open an issue or submit a PR.
+
+1. Fork the repo
+2. Create a feature branch
+3. Commit changes
+4. Open a pull request
+
+## Security
+
+If you discover a security issue, please email reachjoby@gmail.com.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
+
+## Changelog
+
+[Changelog.md](Changelog.md)
