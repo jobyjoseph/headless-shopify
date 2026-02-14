@@ -7,8 +7,11 @@ import {
   HiOutlineChatAlt2,
 } from "react-icons/hi";
 import Image from "next/image";
+import { getFeaturedProducts } from "@/integrations/shopify/featured-products";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const featuredProducts = await getFeaturedProducts(8);
+
   return (
     <main>
       {/* Hero Section */}
@@ -24,7 +27,7 @@ export default function HomePage() {
             timeless design.
           </p>
           <Link
-            href="/collections/all"
+            href="/collections"
             className="inline-block bg-white text-gray-900 px-8 pt-[14px] pb-[10px] text-sm font-medium uppercase tracking-wide hover:bg-gray-100 transition-colors"
           >
             Shop Now
@@ -41,19 +44,19 @@ export default function HomePage() {
           {[
             {
               title: "New Arrivals",
-              href: "/collections/new-arrivals",
+              href: "/collections",
               bg: "bg-stone-200",
               accent: "bg-rose-50",
             },
             {
               title: "Best Sellers",
-              href: "/collections/best-sellers",
+              href: "/collections",
               bg: "bg-stone-300",
               accent: "bg-amber-50",
             },
             {
               title: "Sale",
-              href: "/collections/sale",
+              href: "/collections",
               bg: "bg-stone-200",
               accent: "bg-stone-100",
             },
@@ -85,67 +88,22 @@ export default function HomePage() {
           Featured Products
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto">
-          {[
-            {
-              name: "Meridian Knit Crewneck",
-              price: "$89.00",
-              image:
-                "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=500&q=80",
-            },
-            {
-              name: "Riviera Relaxed Linen Shirt",
-              price: "$65.00",
-              image:
-                "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&q=80",
-            },
-            {
-              name: "Greenwich Wool Overcoat",
-              price: "$195.00",
-              image:
-                "https://images.unsplash.com/photo-1539533113208-f6df8cc8b543?w=500&q=80",
-            },
-            {
-              name: "Alpine Cashmere Wrap Scarf",
-              price: "$120.00",
-              image:
-                "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=500&q=80",
-            },
-            {
-              name: "Milano Leather Tote",
-              price: "$245.00",
-              image:
-                "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=500&q=80",
-            },
-            {
-              name: "Hudson Low-Top Sneakers",
-              price: "$75.00",
-              image:
-                "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=500&q=80",
-            },
-            {
-              name: "Provence Silk Blouse",
-              price: "$110.00",
-              image:
-                "https://images.unsplash.com/photo-1564257631407-4deb1f99d992?w=500&q=80",
-            },
-            {
-              name: "Selvedge Straight-Leg Jeans",
-              price: "$95.00",
-              image:
-                "https://images.unsplash.com/photo-1542272604-787c3835535d?w=500&q=80",
-            },
-          ].map((product, i) => (
-            <Link key={i} href={`/products/product-${i + 1}`} className="group">
-              <div className="relative aspect-square bg-gray-200 mb-3 overflow-hidden">
+          {featuredProducts.map((product) => (
+            <Link
+              key={product.id}
+              href={`/products/${product.handle}`}
+              className="group"
+            >
+              <div className="relative aspect-[3/4] bg-gray-200 mb-3 overflow-hidden">
                 <Image
                   src={product.image}
-                  alt={product.name}
+                  alt={product.imageAlt}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
               <h3 className="text-sm font-medium text-gray-900 group-hover:text-gray-600 transition-colors">
-                {product.name}
+                {product.title}
               </h3>
               <p className="text-sm text-gray-500 mt-1">{product.price}</p>
             </Link>
@@ -153,7 +111,7 @@ export default function HomePage() {
         </div>
         <div className="text-center mt-12">
           <Link
-            href="/collections/all"
+            href="/collections"
             className="inline-block border border-gray-900 text-gray-900 px-8 py-3 text-sm font-medium uppercase tracking-wide hover:bg-gray-900 hover:text-white transition-colors"
           >
             View All Products

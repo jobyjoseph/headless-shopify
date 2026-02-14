@@ -1,0 +1,21 @@
+query FeaturedProducts($first: Int!, $query: String!) {
+  products(first: $first, query: $query) {
+    edges {
+      node {
+        id
+        title
+        handle
+        featuredImage {
+          url
+          altText
+        }
+        priceRange {
+          minVariantPrice {
+            amount
+            currencyCode
+          }
+        }
+      }
+    }
+  }
+}
