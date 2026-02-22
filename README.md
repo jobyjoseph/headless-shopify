@@ -2,7 +2,7 @@
 
 Open‑source Next.js Shopify storefront starter for building headless ecommerce experiences fast.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fjobyjoseph%2Fheadless-shopify&env=NEXT_PUBLIC_SHOPIFY_STOREFRONT_GRAPHQL_ENDPOINT,NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN&envDefaults=%7B%22NEXT_PUBLIC_SHOPIFY_STOREFRONT_GRAPHQL_ENDPOINT%22%3A%22https%3A%2F%2Fyour-store-name.myshopify.com%2Fapi%2F2026-01%2Fgraphql.json%22%2C%22NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN%22%3A%22your-storefront-api-token%22%7D)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fjobyjoseph%2Fheadless-shopify&env=NEXT_PUBLIC_SHOPIFY_STOREFRONT_GRAPHQL_ENDPOINT,NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN,BETTER_AUTH_SECRET&envDefaults=%7B%22NEXT_PUBLIC_SHOPIFY_STOREFRONT_GRAPHQL_ENDPOINT%22%3A%22https%3A%2F%2Fyour-store-name.myshopify.com%2Fapi%2F2026-01%2Fgraphql.json%22%2C%22NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN%22%3A%22your-storefront-api-token%22%2C%22BETTER_AUTH_SECRET%22%3A%22your-secret-key%22%7D)
 
 Live demo: https://headless-shopify-site.vercel.app
 
@@ -47,6 +47,7 @@ These are required to run the app:
 
 - `NEXT_PUBLIC_SHOPIFY_STOREFRONT_GRAPHQL_ENDPOINT`
 - `NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN`
+- `BETTER_AUTH_SECRET`
 
 ## Scripts
 
