@@ -4,6 +4,8 @@ import * as z from "zod";
 
 import { customerAccessTokenCreate } from "@/integrations/shopify/customer-access-token-create";
 import { customerCreate } from "@/integrations/shopify/customer-create";
+import { customerRecover } from "@/integrations/shopify/customer-recover";
+import { customerResetByUrl } from "@/integrations/shopify/customer-reset-by-url";
 
 export type ShopifySignInInput = {
   email: string;
@@ -17,6 +19,15 @@ export type ShopifySignUpInput = {
   lastName?: string;
   acceptsMarketing?: boolean;
   autoSignIn?: boolean;
+};
+
+export type ShopifyForgotPasswordInput = {
+  email: string;
+};
+
+export type ShopifyResetPasswordInput = {
+  password: string;
+  resetUrl: string;
 };
 
 const SHOPIFY_CUSTOMER_TOKEN_COOKIE = "shopifyCustomerAccessToken";
@@ -33,6 +44,15 @@ const signUpSchema = z.object({
   lastName: z.string().min(1).optional(),
   acceptsMarketing: z.boolean().optional(),
   autoSignIn: z.boolean().optional(),
+});
+
+const forgotPasswordSchema = z.object({
+  email: z.email().min(1),
+});
+
+const resetPasswordSchema = z.object({
+  password: z.string().min(5),
+  resetUrl: z.string().min(1),
 });
 
 export const shopifyAuthPlugin = () => {
@@ -157,6 +177,76 @@ export const shopifyAuthPlugin = () => {
           }
 
           return ctx.json({ customer });
+        },
+      ),
+      forgotPassword: createAuthEndpoint(
+        "/shopify-auth/forgot-password",
+        {
+          method: "POST",
+          body: forgotPasswordSchema,
+        },
+        async (ctx) => {
+          const { email } = ctx.body;
+
+          const result = await customerRecover(email);
+
+          if (!result) {
+            throw new APIError("BAD_REQUEST", {
+              message: "Unable to send password reset email.",
+            });
+          }
+
+          const payload = result.customerRecover;
+          const userErrors = payload?.customerUserErrors ?? [];
+
+          if (userErrors.length) {
+            throw new APIError("BAD_REQUEST", {
+              message:
+                userErrors[0]?.message ||
+                "Unable to send password reset email.",
+            });
+          }
+
+          return ctx.json({ ok: true });
+        },
+      ),
+      resetPassword: createAuthEndpoint(
+        "/shopify-auth/reset-password",
+        {
+          method: "POST",
+          body: resetPasswordSchema,
+        },
+        async (ctx) => {
+          const { password, resetUrl } = ctx.body;
+
+          const result = await customerResetByUrl(password, resetUrl);
+
+          if (!result) {
+            throw new APIError("BAD_REQUEST", {
+              message: "Unable to reset password.",
+            });
+          }
+
+          const payload = result.customerResetByUrl;
+          const userErrors = payload?.customerUserErrors ?? [];
+          const token = payload?.customerAccessToken?.accessToken;
+          const expiresAt = payload?.customerAccessToken?.expiresAt;
+
+          if (userErrors.length || !token) {
+            throw new APIError("BAD_REQUEST", {
+              message: userErrors[0]?.message || "Unable to reset password.",
+            });
+          }
+
+          ctx.setCookie(SHOPIFY_CUSTOMER_TOKEN_COOKIE, token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            path: "/",
+            expires: expiresAt ? new Date(expiresAt) : undefined,
+          });
+
+          return ctx.json({ ok: true });
         },
       ),
     },

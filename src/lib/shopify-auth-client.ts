@@ -5,6 +5,8 @@ import type {
   shopifyAuthPlugin,
   ShopifySignInInput,
   ShopifySignUpInput,
+  ShopifyForgotPasswordInput,
+  ShopifyResetPasswordInput,
 } from "@/lib/shopify-auth-plugin";
 
 export const shopifyAuthClientPlugin = () => {
@@ -28,6 +30,26 @@ export const shopifyAuthClientPlugin = () => {
           fetchOptions?: BetterFetchOption,
         ) => {
           return $fetch("/shopify-auth/sign-up", {
+            method: "POST",
+            body: data,
+            ...fetchOptions,
+          });
+        },
+        shopifyForgotPassword: async (
+          data: ShopifyForgotPasswordInput,
+          fetchOptions?: BetterFetchOption,
+        ) => {
+          return $fetch("/shopify-auth/forgot-password", {
+            method: "POST",
+            body: data,
+            ...fetchOptions,
+          });
+        },
+        shopifyResetPassword: async (
+          data: ShopifyResetPasswordInput,
+          fetchOptions?: BetterFetchOption,
+        ) => {
+          return $fetch("/shopify-auth/reset-password", {
             method: "POST",
             body: data,
             ...fetchOptions,
