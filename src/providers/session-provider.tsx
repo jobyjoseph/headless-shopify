@@ -7,7 +7,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { getCurrentUser } from "@/lib/shopify/queries/customers/getCurrentUser";
+import { getCurrentUser } from "@/lib/shopify/getCurrentUser";
 
 type SessionUser = Awaited<ReturnType<typeof getCurrentUser>>;
 
