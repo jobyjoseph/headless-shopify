@@ -2,7 +2,23 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["cdn.shopify.com", "images.unsplash.com", "plus.unsplash.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.shopify.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "plus.unsplash.com",
+        pathname: "/**",
+      },
+    ],
   },
   webpack: (config) => {
     config.module.rules.push({
