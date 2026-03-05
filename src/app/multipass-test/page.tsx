@@ -30,7 +30,9 @@ export default function MultipassTestPage() {
         body: JSON.stringify({ email }),
       });
 
-      const payload = (await response.json().catch(() => ({}))) as MultipassResponse;
+      const payload = (await response
+        .json()
+        .catch(() => ({}))) as MultipassResponse;
 
       if (!response.ok) {
         setResult({ error: payload.error || "Request failed." });
