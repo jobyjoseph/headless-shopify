@@ -49,6 +49,21 @@ These are required to run the app:
 - `NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN`
 - `BETTER_AUTH_SECRET`
 
+Optional for Draft Mode toggling:
+
+- `SHOPIFY_PREVIEW_SECRET`
+
+## Merchandising preview mode
+
+Use `/preview` to enable Next.js Draft Mode.
+
+1. Open `/preview`
+2. Enter `Preview Secret`
+3. Enter a `Product Handle` or `Path`
+4. Submit to enable preview and redirect
+
+When preview mode is enabled, a fixed floating `Exit Preview` button appears on every page.
+
 ## Scripts
 
 - `pnpm dev` – start dev server
