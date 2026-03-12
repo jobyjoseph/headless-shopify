@@ -15,6 +15,7 @@ Live demo: https://headless-shopify-site.vercel.app
 - GraphQL queries and mutations via `.graphql` files
 - Better-Auth authentication
 - Zod validation
+- Product preview using Next.js draft mode and Shopify admin API
 
 ## Tech stack
 
