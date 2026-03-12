@@ -8,6 +8,9 @@ import { ProductTitle } from "./_components/ProductTitle";
 import { ProductActions } from "./_components/ProductActions";
 import { getProductDisplayData } from "./_functions/getProductDisplayData";
 import { DemoStoreNotice } from "./_components/DemoStoreNotice";
+import { draftMode } from "next/headers";
+import { getAdminProductByHandle } from "@/integrations/shopify-admin/get-product-by-handle";
+import { getAdminProductDisplayData } from "./_functions/getAdminProductDisplayData";
 import {
   extractStyleId,
   extractCurrentProductColor,
@@ -23,6 +26,22 @@ export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
   const { handle } = await params;
+  const isDraftMode = (await draftMode()).isEnabled;
+
+  if (isDraftMode) {
+    const adminProduct = await getAdminProductByHandle(handle);
+
+    if (!adminProduct) {
+      return {
+        title: "Product Not Found - Headless",
+      };
+    }
+
+    return {
+      title: `${adminProduct.title} - Headless`,
+    };
+  }
+
   const data = await getProduct({ handle });
 
   if (!data?.product) {
@@ -40,6 +59,54 @@ export async function generateMetadata({
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { handle } = await params;
+  const isDraftMode = (await draftMode()).isEnabled;
+
+  if (isDraftMode) {
+    const adminProduct = await getAdminProductByHandle(handle);
+
+    if (!adminProduct) {
+      return <div>Product not found</div>;
+    }
+
+    const {
+      title: productTitle,
+      formattedPrice,
+      images,
+      description,
+      colors,
+      sizes,
+      variants,
+      badge,
+      currentColor,
+    } = getAdminProductDisplayData(adminProduct);
+
+    return (
+      <main className="px-5 py-8 lg:px-10 lg:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+          <div className="lg:col-span-2">
+            <ImageGrid images={images} />
+          </div>
+
+          <div className="lg:col-span-1">
+            {badge && <ProductBadge text={badge} />}
+            <ProductTitle title={productTitle} />
+            <div className="flex items-center gap-4 flex-wrap">
+              <ProductPrice price={formattedPrice} />
+            </div>
+            <ProductActions
+              colors={colors}
+              sizes={sizes}
+              variants={variants}
+              currentColor={currentColor}
+            />
+            <DemoStoreNotice />
+            <ProductDescription description={description} />
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   const data = await getProduct({ handle });
 
   if (!data?.product) {

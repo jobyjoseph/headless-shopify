@@ -53,6 +53,11 @@ Optional for Draft Mode toggling:
 
 - `SHOPIFY_PREVIEW_SECRET`
 
+Additional vars required to preview unpublished products on PDP:
+
+- `SHOPIFY_ADMIN_GRAPHQL_ENDPOINT`
+- `SHOPIFY_ADMIN_ACCESS_TOKEN`
+
 ## Merchandising preview mode
 
 Use `/preview` to enable Next.js Draft Mode.
@@ -63,6 +68,8 @@ Use `/preview` to enable Next.js Draft Mode.
 4. Submit to enable preview and redirect
 
 When preview mode is enabled, a fixed floating `Exit Preview` button appears on every page.
+
+For unpublished product PDP preview, Draft Mode routes will fetch product data from Shopify Admin API.
 
 ## Scripts
 

@@ -34,7 +34,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${josefinSans.className} min-h-screen flex flex-col`}>
-        <CartProvider>
+        <CartProvider isPreviewMode={isPreview}>
           <SessionProvider>
             <Header />
             <div className="mx-auto w-full max-w-[1590px] flex-1">
