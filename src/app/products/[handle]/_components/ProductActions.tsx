@@ -40,7 +40,7 @@ export const ProductActions = ({
   );
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(false);
-  const { addToCart } = useCart();
+  const { addToCart, isPreviewMode } = useCart();
 
   const findMatchingVariant = () => {
     if (!selectedSize) return null;
@@ -65,6 +65,11 @@ export const ProductActions = ({
   };
 
   const handleAddToCart = async () => {
+    if (isPreviewMode) {
+      alert("Add to cart is disabled in preview mode");
+      return;
+    }
+
     const variant = findMatchingVariant();
 
     if (!variant) {

@@ -43,6 +43,7 @@ interface CartContextType {
   cart: GetCartQuery["cart"] | null;
   loading: boolean;
   error: string | null;
+  isPreviewMode: boolean;
   refreshCart: () => Promise<void>;
   addToCart: (lines: CartLineInput[]) => Promise<void>;
   updateCartLine: (lineId: string, quantity: number) => Promise<void>;
@@ -80,7 +81,13 @@ async function getOrCreateCart() {
   return result?.cart ?? null;
 }
 
-export function CartProvider({ children }: { children: ReactNode }) {
+export function CartProvider({
+  children,
+  isPreviewMode = false,
+}: {
+  children: ReactNode;
+  isPreviewMode?: boolean;
+}) {
   const [cart, setCart] = useState<GetCartQuery["cart"] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -102,6 +109,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const addToCart = useCallback(
     async (lines: CartLineInput[]) => {
       try {
+        if (isPreviewMode) {
+          throw new Error("Add to cart is disabled in preview mode");
+        }
+
         setError(null);
 
         // Ensure we have a cart
@@ -137,7 +148,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         throw err;
       }
     },
-    [cart],
+    [cart, isPreviewMode],
   );
 
   const updateCartLine = useCallback(
@@ -249,6 +260,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         cart,
         loading,
         error,
+        isPreviewMode,
         refreshCart,
         addToCart,
         updateCartLine,

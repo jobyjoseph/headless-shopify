@@ -1,0 +1,34 @@
+query AdminProductByHandle($handle: String!) {
+  productByIdentifier(identifier: { handle: $handle }) {
+    title
+    description
+    tags
+    options {
+      name
+      values
+    }
+    images(first: 20) {
+      edges {
+        node {
+          url
+          altText
+        }
+      }
+    }
+    variants(first: 100) {
+      edges {
+        node {
+          id
+          title
+          price
+          inventoryQuantity
+          inventoryPolicy
+          selectedOptions {
+            name
+            value
+          }
+        }
+      }
+    }
+  }
+}
